@@ -16,7 +16,7 @@ exports.getProductById = getProductById;
  * @return String
  */
  function getAllProducts(req, res) {
-   res.send(`Products page`);
+   res.render('index', { title: 'Hello Pug' });
  }
 
  /**
