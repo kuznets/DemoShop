@@ -16,7 +16,7 @@ exports.getProductById = getProductById;
  * @return String
  */
  function getAllProducts(req, res) {
-   res.render('index', { title: 'Hello Pug' });
+   res.render('./products/index', { title: 'Hello Pug' });
  }
 
  /**
@@ -26,5 +26,9 @@ exports.getProductById = getProductById;
   * @return String
   */
   function getProductById(req, res) {
-    res.send(`Detailed product page. Product id: ${req.params.id}`);
+    let product = {id: '1', name: 'test'};
+    res.render('./products/product', {
+      title: 'Product description',
+      product: product
+    });
   }
