@@ -13,6 +13,7 @@ app.set('views', config.paths.views);
 app.use(logger('dev'));
 
 app.use(express.static(config.paths.public));
+console.log(config.paths.public);
 
 // ---------------------------------------------------------
 // Routes
