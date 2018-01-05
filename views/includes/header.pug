@@ -1,2 +1,10 @@
-header
-  h1 DemoShop
+nav.navbar.navbar-default
+  .container-fluid
+    .navbar-header
+      a.navbar-brand(href='/') DemoShop
+    form.navbar-form.navbar-left(role='search')
+      .form-group
+        input.form-control(type='text', placeholder='Search')
+      button.btn.btn-default(type='submit') Submit
+    button.btn.btn-default.navbar-btn.navbar-right(type='button') Sign in
+    button.btn.btn-default.navbar-btn.navbar-right(type='button') Create account

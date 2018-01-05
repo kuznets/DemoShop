@@ -9,11 +9,13 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', config.paths.views);
 
+app.locals.version = config.version;
+
 // log to console
 app.use(logger('dev'));
 
 app.use(express.static(config.paths.public));
-console.log(config.paths.public);
+app.use('/lib', express.static(config.paths.lib));
 
 // ---------------------------------------------------------
 // Routes

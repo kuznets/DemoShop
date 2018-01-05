@@ -1,0 +1,14 @@
+[
+  {
+    "id": "1",
+    "name": "Books",
+    "ico": "glyphicon glyphicon-book",
+    "url": "#"
+  },
+  {
+    "id": "2",
+    "name": "Music",
+    "ico": "glyphicon glyphicon-music",
+    "url": "#"
+  }
+]

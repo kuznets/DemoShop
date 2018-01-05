@@ -1,6 +1,6 @@
+const categories = require('../data/categories');
+const books = require('../data/books');
 /**
- * The Product API
- *
  * routes:
  *  /
  *  /product/:id
@@ -16,7 +16,11 @@ exports.getProductById = getProductById;
  * @return String
  */
  function getAllProducts(req, res) {
-   res.render('./products/index', { title: 'Hello Pug' });
+   res.render('./products/index', {
+     title: 'Products',
+     books,
+     categories
+   });
  }
 
  /**

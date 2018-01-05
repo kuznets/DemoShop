@@ -1,0 +1,24 @@
+include ../mixins/sidebar-category
+.col-lg-2.col-sm-2.col-xs-12(style='padding:0px;')
+  .sidebar-left
+    dl
+      dd
+        a(href='/')
+          i.glyphicon.glyphicon-home(aria-hidden='true')
+          | Home
+      dd
+        a(href='#')
+          i.glyphicon.glyphicon-exclamation-sign(aria-hidden='true')
+          | New
+      dd
+        a(href='#')
+          i.glyphicon.glyphicon-star(aria-hidden='true')
+          | Recommended
+      dd
+        a(href='#')
+          i.glyphicon.glyphicon-fire(aria-hidden='true')
+          | Sale
+    dl
+      dt Categories
+      for category in categories
+        +sidebar-category(category)

@@ -1,3 +1,30 @@
-h1 {
-  color: red;
+a{
+  color: #000;
+  text-decoration: none;
 }
+.float-right{
+  float: right!important;
+}
+.float-left{
+  float: left!important;
+}
+.float-none{
+  float: none!important;
+}
+.navbar-right{
+  margin-right: 15px;
+}
+
+/* Sidebar */
+.sidebar-left{
+  background: #f1f1f1;
+  padding: 15px;
+}
+.sidebar-left dd{
+  margin: 8px 0px;
+}
+.sidebar-left i{
+  font-size: 15px;
+  margin-right: 5px;
+}
+/* End Sidebar */
