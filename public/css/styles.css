@@ -28,3 +28,15 @@ a{
   margin-right: 5px;
 }
 /* End Sidebar */
+
+/* Content */
+.product-list .item{
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 5px;
+  position: relative;
+  margin: 15px 10px;
+}
+.product-list .item .item-data{
+  padding: 7px 0px;
+}

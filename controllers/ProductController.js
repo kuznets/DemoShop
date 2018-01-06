@@ -18,7 +18,7 @@ exports.getProductById = getProductById;
  function getAllProducts(req, res) {
    res.render('./products/index', {
      title: 'Products',
-     books,
+     products: books,
      categories
    });
  }

@@ -1,0 +1,11 @@
+mixin product-list-preview(product)
+  .col-lg-3.col-sm-3.col-xs-12(style='padding:0px;')
+    .item
+      .item-img
+        span.bg-img
+        img.img-responsive(src=product.imageUrl , alt='img', width='100%')
+      .item-data
+        p
+          | #{product.title}
+          br
+          span $735
