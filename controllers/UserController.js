@@ -1,18 +1,18 @@
 /**
- * The User API
- *
  * routes:
- *  /user
+ *  /user/:id
  */
 
 exports.getUserInfo = getUserInfo;
 
 /**
- * GET /user
+ * GET /user/:id
  * Return user info
- * @method getUserInfo
- * @return String
+ * @method showUserInfo
+ * @return
  */
- function getUserInfo(req, res) {
-   res.send(`User info page`);
+ function showUserInfo(req, res) {
+   res.render('./user/user', {
+     title: 'User page.'
+   });
  }

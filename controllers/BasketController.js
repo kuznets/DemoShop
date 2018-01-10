@@ -1,18 +1,18 @@
 /**
- * The Basket API
- *
  * routes:
  *  /basket
  */
 
-exports.getAllBasketProducts = getAllBasketProducts;
+exports.showBasketPage = showBasketPage;
 
 /**
  * GET /basket
- * Return basket info
- * @method getAllBasketProducts
- * @return String
+ * Show basker page.
+ * @method showBasketPage
+ * @return
  */
- function getAllBasketProducts(req, res) {
-   res.send(`Basket page`);
+ function showBasketPage(req, res) {
+   res.render('./basket/basket', {
+     title: 'Basket'
+   });
  }

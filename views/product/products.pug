@@ -1,0 +1,8 @@
+extends ../layouts/layout
+include ../mixins/product-list-preview
+
+block content
+  .col-lg-10.col-sm-10.col-xs-12
+    section.product-list
+      for product in products
+        +product-list-preview(product)

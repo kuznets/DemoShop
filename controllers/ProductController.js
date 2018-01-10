@@ -2,21 +2,21 @@ const categories = require('../data/categories');
 const books = require('../data/books');
 /**
  * routes:
- *  /
+ *  /products
  *  /product/:id
  */
 
-exports.getAllProducts = getAllProducts;
-exports.getProductById = getProductById;
+exports.showProductsPage = showProductsPage;
+exports.showOneProductPage = showOneProductPage;
 
 /**
- * GET /
- * Return all products from db.
- * @method getAllProducts
- * @return String
+ * GET /products
+ * Show products page with all products.
+ * @method showProductsPage
+ * @return
  */
- function getAllProducts(req, res) {
-   res.render('./products/index', {
+ function showProductsPage(req, res) {
+   res.render('./product/products', {
      title: 'Products',
      products: books,
      categories
@@ -25,14 +25,13 @@ exports.getProductById = getProductById;
 
  /**
   * GET /product/:id
-  * Return detailed products info from db.
-  * @method getProductById
-  * @return String
+  * Show product page with one product.
+  * @method showOneProductPage
+  * @return
   */
-  function getProductById(req, res) {
-    let product = {id: '1', name: 'test'};
-    res.render('./products/product', {
+  function showOneProductPage(req, res) {
+    res.render('./product/product', {
       title: 'Product description',
-      product: product
+      //product: 
     });
   }
