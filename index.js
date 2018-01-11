@@ -2,7 +2,7 @@ const express = require('express');
 const logger = require('morgan');
 
 const config = require('./config/app');
-const router = require('./config/routers');
+const router = require('./config/routes');
 
 const app = express();
 

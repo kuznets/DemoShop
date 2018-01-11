@@ -20,9 +20,9 @@ router.get('/', main.showMain);
 //Auth pages
 router.get('/register', auth.showRegisterPage);
 router.get('/login', auth.showLoginPage);
-router.post('/register', auth.register);
-router.post('/login', auth.login);
-router.post('/logout', auth.logout);
+//router.post('/register', auth.register);
+//router.post('/login', auth.login);
+//router.post('/logout', auth.logout);
 
 //Users page
 router.get('/user/:id', user.showUserInfo);

@@ -3,7 +3,7 @@
  *  /user/:id
  */
 
-exports.getUserInfo = getUserInfo;
+exports.showUserInfo = showUserInfo;
 
 /**
  * GET /user/:id
