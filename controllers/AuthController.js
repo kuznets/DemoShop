@@ -15,7 +15,7 @@
   * @return
   */
 function showRegisterPage(req, res) {
-  res.render('./auth/register', {
+  res.render('./auth/registration', {
     title: 'Register'
   });
 }

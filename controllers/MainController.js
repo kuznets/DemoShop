@@ -1,5 +1,3 @@
-showMain
-
 /**
  * routes:
  *  /
@@ -16,7 +14,5 @@ showMain
   function showMain(req, res) {
     res.render('./main/main', {
       title: 'Main',
-      //sales
-      //categories
     });
   }

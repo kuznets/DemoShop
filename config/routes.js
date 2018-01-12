@@ -8,14 +8,22 @@
 const express = require('express');
 const router = express.Router();
 
+//Routes
 const main = require('../controllers/MainController');
 const auth = require('../controllers/AuthController');
 const user = require('../controllers/UserController');
 const product = require('../controllers/ProductController');
 const basket = require('../controllers/BasketController');
 
+//Middlewares
+const categories = require('../middleware/get-categories');
+const products = require('../middleware/get-products');
+
+//Required routes
+router.use(categories.getCategories);
+
 //Main page
-router.get('/', main.showMain);
+router.get('/', products.getProducts, main.showMain);
 
 //Auth pages
 router.get('/register', auth.showRegisterPage);
@@ -28,8 +36,8 @@ router.get('/login', auth.showLoginPage);
 router.get('/user/:id', user.showUserInfo);
 
 //Products pages
-router.get('/products', product.showProductsPage);
-router.get('/product/:id', product.showOneProductPage);
+router.get('/products', products.getProducts, product.showProductsPage);
+router.get('/product/:slug', products.findOneProduct, product.showOneProductPage);
 
 //Basket page
 router.get('/basket', basket.showBasketPage);
