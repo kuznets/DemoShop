@@ -18,6 +18,7 @@ const basket = require('../controllers/BasketController');
 //Middlewares
 const categories = require('../middleware/get-categories');
 const products = require('../middleware/get-products');
+const error = require('../middleware/error-handler');
 
 //Required routes
 router.use(categories.getCategories);
@@ -41,5 +42,9 @@ router.get('/product/:slug', products.findOneProduct, product.showOneProductPage
 
 //Basket page
 router.get('/basket', basket.showBasketPage);
+
+//Error handler
+router.use(error.notFound);
+router.use(router.get('env') === 'development' ? error.development : error.production);
 
 module.exports = router;
