@@ -1,10 +1,33 @@
 const express = require('express');
 const logger = require('morgan');
+//const { MongoClient} = require('mongodb');
 
 const config = require('./config/app');
 const router = require('./config/routes');
 
 const app = express();
+
+// MongoClient.connect('mongodb://localhost:27017/demoshop')
+//   .then(client => {
+//     console.log('Connected to mongodb');
+
+//     let db = client.db('demoshop');
+//     //console.log(db);
+
+//     let collection = db.collection('demo');
+//     //console.log(collection);
+
+//     collection.insertOne({
+//       title: 'DemoShop',
+//       contemt: 'djkghjkghjkg'
+//     }).then(result => {
+//       console.log(result);
+//     })
+//     .catch(console.error);
+
+//     client.close();
+//   })
+//   .catch(console.error);
 
 app.set('view engine', 'pug');
 app.set('views', config.paths.views);

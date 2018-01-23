@@ -6,6 +6,6 @@ mixin product-list-preview(product)
         img.img-responsive(src=product.imageUrl , alt='img', width='100%')
       .item-data
         p
-          | #{product.title}
+          a(href=`/product/${product.slug}`) #{product.title}
           br
           span $735

@@ -9,14 +9,15 @@ exports.showOneProductPage = showOneProductPage;
 
 /**
  * GET /products
- * Show products page with all products.
+ * Show products page with all products. 
  * @method showProductsPage
  * @return
  */
  function showProductsPage(req, res) {
-   res.render('./product/products', {
-     title: 'Products',
-   });
+  res.render('./product/products', {
+    products: req.products,
+    title: 'Products',
+  });
  }
 
  /**
@@ -27,6 +28,7 @@ exports.showOneProductPage = showOneProductPage;
   */
   function showOneProductPage(req, res) {
     res.render('./product/product', {
+      product: req.product,
       title: 'Product description', 
     });
   }

@@ -16,15 +16,15 @@ const product = require('../controllers/ProductController');
 const basket = require('../controllers/BasketController');
 
 //Middlewares
-const categories = require('../middleware/get-categories');
-const products = require('../middleware/get-products');
+const categories = require('../middleware/categoriesMidleware');
+const products = require('../middleware/productsMidleware');
 const error = require('../middleware/error-handler');
 
 //Required routes
 router.use(categories.getCategories);
 
 //Main page
-router.get('/', products.getProducts, main.showMain);
+router.get('/', products.getAllProducts, main.showMainPage);
 
 //Auth pages
 router.get('/register', auth.showRegisterPage);
@@ -37,7 +37,7 @@ router.get('/login', auth.showLoginPage);
 router.get('/user/:id', user.showUserInfo);
 
 //Products pages
-router.get('/products', products.getProducts, product.showProductsPage);
+router.get('/products', products.getAllProducts, product.showProductsPage);
 router.get('/product/:slug', products.findOneProduct, product.showOneProductPage);
 
 //Basket page
