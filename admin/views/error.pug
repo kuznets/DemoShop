@@ -1,0 +1,11 @@
+extends layouts/layout
+
+block content
+  .col-lg-10.col-sm-10.col-xs-12
+    section.error-page
+      if error
+        h1= error.message
+        pre= error.stack
+      else
+        h1= message
+        p An error has occurred!

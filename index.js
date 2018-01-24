@@ -10,6 +10,7 @@ app.set('view engine', 'pug');
 app.set('views', config.paths.views);
 
 app.locals.version = config.version;
+app.locals.basedir = config.paths.views;
 
 // log to console
 app.use(logger('dev'));
