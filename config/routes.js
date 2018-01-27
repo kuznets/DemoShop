@@ -7,7 +7,6 @@
  */
 const express = require('express');
 const router = express.Router();
-const admin = require('../admin');
 
 //Routes
 const main = require('../controllers/MainController');
@@ -43,9 +42,6 @@ router.get('/product/:slug', products.findOneProduct, product.showOneProductPage
 
 //Basket page
 router.get('/basket', basket.showBasketPage);
-
-//Admin
-router.use('/admin', admin);
 
 //Error handler
 router.use(error.notFound);
