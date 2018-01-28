@@ -48,7 +48,7 @@ module.exports = {
   },
 
   /**
-  * PUT /product/:slug/update
+  * POST /product/:slug/update
   * Update the product.
   * @method updateProduct
   * @return
@@ -59,7 +59,7 @@ module.exports = {
   },
 
   /**
-  * DELETE /product/:slug/delete
+  * POST /product/:slug/delete
   * Delete the product.
   * @method deleteProduct
   * @return

@@ -23,9 +23,8 @@ const error = require('../middleware/error-handler');
 //Categories routes
 router.use(categories.findAllCategories);
 router.post('/category/create', categories.createCategory);
-router.put('/category/:slug/update', categories.updateCategory);
-router.delete('/category/:slug/delete', categories.deleteCategory);
-
+router.post('/category/:slug/update', categories.updateCategory);
+router.post('/category/:slug/delete', categories.deleteCategory);
 
 //Auth routes
 router.get('/register', auth.showRegisterPage);
@@ -45,8 +44,8 @@ router.get('/product/create')
   .post(products.createProduct);
 router.route('/product/:slug/update')
   .get(product.showUpdatePage)
-  .put(products.updateProduct);
-router.delete('/product/:slug/delete', products.deleteProduct);
+  .post(products.updateProduct);
+router.post('/product/:slug/delete', products.deleteProduct);
 
 
 //Basket routes

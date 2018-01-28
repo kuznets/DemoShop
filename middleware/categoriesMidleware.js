@@ -25,7 +25,7 @@ module.exports = {
   },
 
   /**
-  * PUT /category/:slug/update
+  * POST /category/:slug/update
   * Update the category
   * @method updateCategory
   * @return
@@ -36,7 +36,7 @@ module.exports = {
   },
 
   /**
-  * DELETE /category/:slug/delete
+  * POST /category/:slug/delete
   * Delete the category
   * @method deleteCategory
   * @return
