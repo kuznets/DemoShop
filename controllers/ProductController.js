@@ -6,6 +6,8 @@
 
 exports.showProductsPage = showProductsPage;
 exports.showOneProductPage = showOneProductPage;
+exports.showCreatePage = showCreatePage;
+exports.showUpdatePage = showUpdatePage;
 
 /**
  * GET /products
@@ -29,4 +31,22 @@ exports.showOneProductPage = showOneProductPage;
     res.render('./product/product', {
       title: 'Product description', 
     });
+  }
+
+  /**
+  * GET /product/create
+  * Show page where we can create new product.
+  * @method showCreatePage
+  * @return
+  */
+  function showCreatePage(req,res) {
+  }
+
+  /**
+  * GET /product/:slug/update
+  * Show page where we can edit product.
+  * @method showUpdatePage
+  * @return
+  */
+  function showUpdatePage(req,res) {
   }
