@@ -1,4 +1,4 @@
-const categories = require('../data/categories');
+const { Category } = require('../models/category');
 
 module.exports = {
 
@@ -8,9 +8,13 @@ module.exports = {
   * @return
   */
   findAllCategories(req, res, next) {
-    res.locals.categories = categories;
+    Category.find()
+      .then(categories => {
+        res.locals.categories = categories;
 
-    next();
+        next();
+      })
+      .catch(next);
   },
 
   /**
@@ -20,8 +24,13 @@ module.exports = {
   * @return
   */
   createCategory(req, res, next) {
-
-    next();
+    Category.create({
+      _id: req.body.id,
+      title: req.body.title,
+      ico_url: req.body.ico_url
+    })
+      .this(category => res.redirect('/admin/categories'))
+      .catch(next);
   },
 
   /**
@@ -31,8 +40,9 @@ module.exports = {
   * @return
   */
   updateCategory(req, res, next) {
-
-    next();
+    Category.findOneAndUpdate({ _id: req.body.slug}, req.body)
+      .then(category => res.redirect('/admin/categories'))
+      .catch(next);
   },
 
   /**
@@ -42,7 +52,8 @@ module.exports = {
   * @return
   */
   deleteCategory(req, res, next) {
-
-    next();
-  }
+    Category.deleteOne({ slug: req.body.slug})
+      .then(() => res.redirect('/admin/categories'))
+      .catch(next);
+    }
 };
