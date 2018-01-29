@@ -1,6 +1,7 @@
 const express = require('express');
 const logger = require('morgan');
 
+const db = require('./services/db');
 const config = require('./config/app');
 const router = require('./config/routes');
 const admin = require('./admin');

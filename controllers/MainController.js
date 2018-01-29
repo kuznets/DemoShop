@@ -3,15 +3,15 @@
  *  /
  */
 
- exports.showMain = showMain;
+ exports.showMainPage = showMainPage;
 
  /**
   * GET /
   * Show main page with sales.
-  * @method showMain
+  * @method showMainPage
   * @return
   */
-  function showMain(req, res) {
+  function showMainPage(req, res) {
     res.render('./main/main', {
       title: 'Main',
     });

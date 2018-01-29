@@ -16,32 +16,43 @@ const product = require('../controllers/ProductController');
 const basket = require('../controllers/BasketController');
 
 //Middlewares
-const categories = require('../middleware/get-categories');
-const products = require('../middleware/get-products');
+const categories = require('../middleware/categoriesMidleware');
+const products = require('../middleware/productsMidleware');
 const error = require('../middleware/error-handler');
 
-//Required routes
-router.use(categories.getCategories);
+//Categories routes
+router.use(categories.findAllCategories);
+router.post('/category/create', categories.createCategory);
+router.post('/category/:slug/update', categories.updateCategory);
+router.post('/category/:slug/delete', categories.deleteCategory);
 
-//Main page
-router.get('/', products.getProducts, main.showMain);
-
-//Auth pages
+//Auth routes
 router.get('/register', auth.showRegisterPage);
 router.get('/login', auth.showLoginPage);
 //router.post('/register', auth.register);
 //router.post('/login', auth.login);
 //router.post('/logout', auth.logout);
 
-//Users page
+//Users routes
 router.get('/user/:id', user.showUserInfo);
 
-//Products pages
-router.get('/products', products.getProducts, product.showProductsPage);
+//Products routes
+router.get('/products', products.findAllProducts, product.showProductsPage);
 router.get('/product/:slug', products.findOneProduct, product.showOneProductPage);
+router.get('/product/create')
+  .get(product.showCreatePage)
+  .post(products.createProduct);
+router.route('/product/:slug/update')
+  .get(product.showUpdatePage)
+  .post(products.updateProduct);
+router.post('/product/:slug/delete', products.deleteProduct);
 
-//Basket page
+
+//Basket routes
 router.get('/basket', basket.showBasketPage);
+
+//Main routes
+router.get('/', products.findAllProducts, main.showMainPage);
 
 //Error handler
 router.use(error.notFound);
