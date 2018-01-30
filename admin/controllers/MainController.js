@@ -4,6 +4,7 @@
  */
 
 exports.showMainAdminPage = showMainAdminPage;
+
 /**
  * GET /
  * Show main page with sales.
@@ -11,7 +12,6 @@ exports.showMainAdminPage = showMainAdminPage;
  * @return
  */
 function showMainAdminPage(req, res) {
-    console.log('showMain');
     res.render('./main/main', {
         title: 'Main',
     });

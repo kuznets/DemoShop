@@ -1,0 +1,15 @@
+mixin category-list-preview(category)
+  table.table.table-striped
+    thead
+      tr
+        th #
+        th Name
+        th Edit
+        th Delete
+    tbody
+      th(scope='row') 1
+      td #{category.title}
+      td
+        a(href=#) Edit
+      td
+        a(href=#) Delete

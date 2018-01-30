@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Category = new Schema({
-    _id: String,
     title: String,
+    slug: String,
     ico_url: String
 });
 

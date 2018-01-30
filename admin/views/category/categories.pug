@@ -1,0 +1,9 @@
+extends ../layouts/layout
+include /mixins/category-list-preview
+
+block content
+  .col-lg-10.col-sm-10.col-xs-12
+    section.category-list
+    p Categories
+    for category in categories
+        +category-list-preview(category)

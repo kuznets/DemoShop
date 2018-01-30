@@ -10,16 +10,20 @@ const express = require('express');
 const router = express.Router();
 
 //Routes
-const main = require('../controllers/MainController');
+const mainPage = require('../controllers/MainController');
+const categoriesPage = require('../controllers/CategoryController');
 
 //Middlewares
-const categories = require('../../middleware/get-categories');
-const products = require('../../middleware/get-products');
+const categories = require('../../middleware/categoriesMidleware');
+const products = require('../../middleware/productsMidleware');
 
-//Required routes
-router.use(categories.getCategories);
+//Categories routes
+router.get('/categories', 
+    categories.findAllCategories, 
+    categoriesPage.showCategoriesPage
+);
 
 //Main page
-router.get('/', main.showMainAdminPage);
+router.get('/', mainPage.showMainAdminPage);
 
 module.exports = router;
