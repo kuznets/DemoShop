@@ -1,9 +1,31 @@
 extends ../layouts/layout
-include /mixins/category-list-preview
+include /mixins/bootstrap/bt-form-text-field
+include /mixins/bootstrap/bt-button
 
 block content
   .col-lg-10.col-sm-10.col-xs-12
     section.category-list
-    p Categories
-    for category in categories
-        +category-list-preview(category)
+    h3 Categories
+    hr
+    h4 Create new Category:
+    form(method='POST', action='/admin/category/create')
+      +bt-form-text-field('Category name', 'Category name', 'category-name-input', 'title')
+      +bt-form-text-field('Category slug', 'Category slug', 'category-slug-input', 'slug')
+      +bt-button('Add')
+    hr
+    h4 Category list
+    table.table.table-striped
+      thead
+        tr
+          th Name
+          th
+          th
+      tbody
+        for category in categories
+          tr
+            td #{category.title}
+            td
+              a(href=`/admin/category/${category.slug}/edit`) Edit
+            td
+              a(href=`/admin/category/${category.slug}/delete`) Delete
+    

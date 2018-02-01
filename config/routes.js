@@ -22,9 +22,6 @@ const error = require('../middleware/error-handler');
 
 //Categories routes
 router.use(categories.findAllCategories);
-router.post('/category/create', categories.createCategory);
-router.post('/category/:slug/update', categories.updateCategory);
-router.post('/category/:slug/delete', categories.deleteCategory);
 
 //Auth routes
 router.get('/register', auth.showRegisterPage);

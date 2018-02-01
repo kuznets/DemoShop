@@ -1,4 +1,4 @@
-const { Category } = require('../models/category');
+const Category = require('../models/category');
 
 module.exports = {
 
@@ -18,6 +18,21 @@ module.exports = {
   },
 
   /**
+  * Find one category and put it to locals.
+  * @method findOneCategory
+  * @return
+  */
+  findOneCategory(req, res, next) {
+    Category.findOne({ slug: req.params.slug })
+      .then(category => {
+        res.locals.category = category;
+
+        next();
+      })
+      .catch(next);
+  },
+
+  /**
   * POST /category/create
   * Create new category
   * @method createCategory
@@ -25,11 +40,11 @@ module.exports = {
   */
   createCategory(req, res, next) {
     Category.create({
-      _id: req.body.id,
       title: req.body.title,
+      slug: req.body.slug,
       ico_url: req.body.ico_url
     })
-      .this(category => res.redirect('/admin/categories'))
+      .then(() => res.redirect('/admin/categories'))
       .catch(next);
   },
 
@@ -40,19 +55,19 @@ module.exports = {
   * @return
   */
   updateCategory(req, res, next) {
-    Category.findOneAndUpdate({ _id: req.body.slug}, req.body)
+    Category.findOneAndUpdate({ slug: req.params.slug}, req.body)
       .then(category => res.redirect('/admin/categories'))
       .catch(next);
   },
 
   /**
-  * POST /category/:slug/delete
+  * GET /category/:slug/delete
   * Delete the category
   * @method deleteCategory
   * @return
   */
   deleteCategory(req, res, next) {
-    Category.deleteOne({ slug: req.body.slug})
+    Category.deleteOne({ slug: req.params.slug})
       .then(() => res.redirect('/admin/categories'))
       .catch(next);
     }

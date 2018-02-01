@@ -1,0 +1,13 @@
+extends ../layouts/layout
+include /mixins/bootstrap/bt-form-text-field
+include /mixins/bootstrap/bt-button
+
+block content
+  .col-lg-10.col-sm-10.col-xs-12
+    section.category-edit-form
+    h3 Category edit
+    hr
+    form(method='POST', action=`/admin/category/${category.slug}/update`)
+      +bt-form-text-field('Category name', `${category.title}`, 'category-name-input', 'title')
+      +bt-form-text-field('Category slug', `${category.slug}`, 'category-slug-input', 'slug')
+      +bt-button('Edit')

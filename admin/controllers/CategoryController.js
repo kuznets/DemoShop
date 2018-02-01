@@ -1,9 +1,11 @@
 /**
  * routes:
- *  /categories
+ * /categories
+ * /category/:slug/edit
  */
 
 exports.showCategoriesPage = showCategoriesPage;
+exports.showEditPage = showEditPage;
 
 /**
  * GET /categories
@@ -12,7 +14,20 @@ exports.showCategoriesPage = showCategoriesPage;
  * @return
  */
 function showCategoriesPage(req, res) {
-  res.render('./category/categories', {
+  res.render('category/categories', {
     title: 'Categories',
+  });
+}
+
+/**
+ * GET /category/:slug/edit
+ * Show page where we can edit the category.
+ * @method showEditPage
+ * @return
+ */
+function showEditPage(req, res) {
+  console.log(res.locals.category);
+  res.render('category/edit-category', {
+    title: 'Category edit',
   });
 }

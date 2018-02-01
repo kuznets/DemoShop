@@ -11,17 +11,25 @@ const router = express.Router();
 
 //Routes
 const mainPage = require('../controllers/MainController');
-const categoriesPage = require('../controllers/CategoryController');
+const categoriesPages = require('../controllers/CategoryController');
 
 //Middlewares
 const categories = require('../../middleware/categoriesMidleware');
 const products = require('../../middleware/productsMidleware');
 
 //Categories routes
-router.get('/categories', 
-    categories.findAllCategories, 
-    categoriesPage.showCategoriesPage
+router.get('/categories',
+  categories.findAllCategories,
+  categoriesPages.showCategoriesPage
 );
+router.get('/category/:slug/edit',
+  categories.findOneCategory,
+  categoriesPages.showEditPage
+);
+router.post('/category/create', categories.createCategory);
+router.post('/category/:slug/update', categories.updateCategory);
+router.get('/category/:slug/delete', categories.deleteCategory);
+
 
 //Main page
 router.get('/', mainPage.showMainAdminPage);
