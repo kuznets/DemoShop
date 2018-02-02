@@ -1,5 +1,12 @@
 const Category = require('../models/category');
 
+/**
+ * routes:
+ * /category/create
+ * /category/:slug/update
+ * /category/:slug/delete
+ */
+
 module.exports = {
 
   /**
@@ -11,7 +18,6 @@ module.exports = {
     Category.find()
       .then(categories => {
         res.locals.categories = categories;
-
         next();
       })
       .catch(next);
@@ -26,7 +32,6 @@ module.exports = {
     Category.findOne({ slug: req.params.slug })
       .then(category => {
         res.locals.category = category;
-
         next();
       })
       .catch(next);

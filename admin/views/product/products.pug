@@ -1,0 +1,30 @@
+extends ../layouts/layout
+include /mixins/bootstrap/bt-form-text-field
+include /mixins/bootstrap/bt-button
+
+block content
+  .col-lg-10.col-sm-10.col-xs-12
+    section.product-list
+    h3 Products
+    hr
+    a(href=`/admin/product/create`) Create new Product
+    hr
+    h4 Products list
+    table.table.table-striped
+      thead
+        tr
+          th Name
+          th
+          th
+      tbody
+        for product in products
+          tr
+            td #{product.title}
+            td #{product.description}
+            td #{product.price}
+            td #{product.amount}
+            td
+              a(href=`/admin/product/${product.slug}/edit`) Edit
+            td
+              a(href=`/admin/product/${product.slug}/delete`) Delete
+    

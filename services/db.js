@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { mongodbUri } = require('../config/app');
 
 mongoose.Promise = global.Promise;
+mongoose.set('debug', true);
 
 mongoose.connect(mongodbUri.mlab);
 

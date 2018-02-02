@@ -12,6 +12,7 @@ const router = express.Router();
 //Routes
 const mainPage = require('../controllers/MainController');
 const categoriesPages = require('../controllers/CategoryController');
+const productsPages = require('../controllers/ProductController');
 
 //Middlewares
 const categories = require('../../middleware/categoriesMidleware');
@@ -30,6 +31,19 @@ router.post('/category/create', categories.createCategory);
 router.post('/category/:slug/update', categories.updateCategory);
 router.get('/category/:slug/delete', categories.deleteCategory);
 
+//Products routes
+router.get('/products',
+  products.findAllProducts,
+  productsPages.showProductsPage
+);
+router.get('/product/:slug/edit',
+  products.findOneProduct,
+  productsPages.showEditPage
+);
+router.get('/product/create', productsPages.showCreatePage);
+router.post('/product/create', products.createProduct);
+router.post('/product/:slug/update', products.updateProduct);
+router.get('/product/:slug/delete', products.deleteProduct);
 
 //Main page
 router.get('/', mainPage.showMainAdminPage);

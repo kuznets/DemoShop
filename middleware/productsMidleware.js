@@ -1,17 +1,26 @@
-const products = require('../data/books');
+const Product = require('../models/product');
+
+/**
+ * routes:
+ * /product/create
+ * /product/:slug/update
+ * /product/:slug/delete
+ */
 
 module.exports = {
 
   /**
-  * GET /products
   * Find all products and put it to locals.
   * @method findAllProducts
   * @return
   */
   findAllProducts(req, res, next) {
-    res.locals.products = products;
-
-    next();
+    Product.find()
+      .then(products => {
+        res.locals.products = products;
+        next();
+      })
+      .catch(next);
   },
 
   /**
@@ -21,19 +30,12 @@ module.exports = {
   * @return
   */
   findOneProduct(req, res, next) {
-    let productSlug = req.params.slug;
-    let foundProduct = products.find(product => product.slug === productSlug);
-
-    if (!foundProduct) {
-      let error = new Error('Product not found');
-      error.status = 404;
-      next(error);
-    } else {
-      res.locals.product = foundProduct;
-      console.log(res.locals.product);
-
-      next();
-    }
+    Product.findOne({ slug: req.params.slug })
+      .then(product => {
+        res.locals.product = product;
+        next();
+      })
+      .catch(next);
   },
 
   /**
@@ -43,8 +45,16 @@ module.exports = {
   * @return
   */
   createProduct(req, res, next) {
-
-    next();
+    Product.create({
+      title: req.body.title,
+      slug: req.body.slug,
+      description: req.body.description,
+      price: req.body.price,
+      amount: req.body.amount, 
+      img_url: req.body.img_url
+    })
+      .then(() => res.redirect('/admin/products'))
+      .catch(next);
   },
 
   /**
@@ -54,8 +64,9 @@ module.exports = {
   * @return
   */
   updateProduct(req, res, next) {
-
-    next();
+    Product.findOneAndUpdate({ slug: req.params.slug}, req.body)
+      .then(product => res.redirect('/admin/products'))
+      .catch(next);
   },
 
   /**
@@ -65,7 +76,8 @@ module.exports = {
   * @return
   */
   deleteProduct(req, res, next) {
-
-    next();
+    Product.deleteOne({ slug: req.params.slug})
+      .then(() => res.redirect('/admin/products'))
+      .catch(next);
   }
 };

@@ -26,7 +26,6 @@ function showCategoriesPage(req, res) {
  * @return
  */
 function showEditPage(req, res) {
-  console.log(res.locals.category);
   res.render('category/edit-category', {
     title: 'Category edit',
   });

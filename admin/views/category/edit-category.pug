@@ -8,6 +8,6 @@ block content
     h3 Category edit
     hr
     form(method='POST', action=`/admin/category/${category.slug}/update`)
-      +bt-form-text-field('Category name', `${category.title}`, 'category-name-input', 'title')
-      +bt-form-text-field('Category slug', `${category.slug}`, 'category-slug-input', 'slug')
+      +bt-form-text-field('Category name', `${category.title}`, 'category-name-input', 'title', `${category.title}`)
+      +bt-form-text-field('Category slug', `${category.slug}`, 'category-slug-input', 'slug', `${category.slug}`)
       +bt-button('Edit')
