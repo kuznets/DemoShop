@@ -21,7 +21,7 @@ const products = require('../middleware/productsMidleware');
 const error = require('../middleware/error-handler');
 
 //Categories routes
-//router.use(categories.findAllCategories);
+router.use(categories.findAllCategories);
 
 //Auth routes
 router.get('/register', auth.showRegisterPage);
@@ -49,7 +49,10 @@ router.post('/product/:slug/delete', products.deleteProduct);
 router.get('/basket', basket.showBasketPage);
 
 //Main routes
-router.get('/', products.findAllProducts, main.showMainPage);
+router.get('/', 
+  products.findAllProducts, 
+  main.showMainPage
+);
 
 //Error handler
 router.use(error.notFound);

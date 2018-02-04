@@ -3,9 +3,9 @@ mixin product-list-preview(product)
     .item
       .item-img
         span.bg-img
-        img.img-responsive(src=product.imageUrl , alt='img', width='100%')
+        a(href=`/product/${product.slug}`)
+          img.img-responsive(src=product.img_url , alt='img', width='100%')
       .item-data
-        p
-          | #{product.title}
-          br
-          span $735
+        a(href=`/product/${product.slug}`)
+          p #{product.title}
+        p $#{product.price}
