@@ -1,0 +1,5 @@
+mixin bt-select-field(label, id, name, items)
+  label(for=id) #{label}
+  select.form-control(name=name)
+    each item in items
+      option(value=item.title)= item.title

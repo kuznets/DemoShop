@@ -45,14 +45,7 @@ module.exports = {
   * @return
   */
   createProduct(req, res, next) {
-    Product.create({
-      title: req.body.title,
-      slug: req.body.slug,
-      description: req.body.description,
-      price: req.body.price,
-      amount: req.body.amount, 
-      img_url: req.body.img_url
-    })
+    Product.create(req.body)
       .then(() => res.redirect('/admin/products'))
       .catch(next);
   },

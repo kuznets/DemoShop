@@ -1,6 +1,8 @@
 extends ../layouts/layout
 include /mixins/bootstrap/bt-form-text-field
 include /mixins/bootstrap/bt-button
+include /mixins/bootstrap/bt-select-field
+
 
 block content
   .col-lg-10.col-sm-10.col-xs-12
@@ -10,6 +12,7 @@ block content
     form(method='POST', action=`/admin/product/${product.slug}/update`)
       +bt-form-text-field('Product name', `${product.title}`, 'product-name-input', 'title', `${product.title}`)
       +bt-form-text-field('Product slug', `${product.slug}`, 'product-slug-input', 'slug', `${product.slug}`)
+      +bt-select-field('Category', 'product-category-select', 'category', categories)
       +bt-form-text-field('Product description', `${product.description}`, 'product-description-input', 'description', `${product.slug}`)
       +bt-form-text-field('Product price', `${product.price}`, 'product-price-input', 'price', `${product.price}`)
       +bt-form-text-field('Product amount', `${product.amount}`, 'product-amount-input', 'amount', `${product.amount}`)

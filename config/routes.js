@@ -21,7 +21,7 @@ const products = require('../middleware/productsMidleware');
 const error = require('../middleware/error-handler');
 
 //Categories routes
-router.use(categories.findAllCategories);
+//router.use(categories.findAllCategories);
 
 //Auth routes
 router.get('/register', auth.showRegisterPage);

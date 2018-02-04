@@ -1,6 +1,7 @@
 extends ../layouts/layout
 include /mixins/bootstrap/bt-form-text-field
 include /mixins/bootstrap/bt-button
+include /mixins/bootstrap/bt-select-field
 
 block content
   .col-lg-10.col-sm-10.col-xs-12
@@ -10,6 +11,7 @@ block content
     form(method='POST', action='/admin/product/create')
       +bt-form-text-field('Product name', 'Product name', 'product-name-input', 'title')
       +bt-form-text-field('Product slug', 'Product slug', 'product-slug-input', 'slug')
+      +bt-select-field('Category', 'product-category-select', 'category', categories)
       +bt-form-text-field('Product description', 'Product description', 'product-description-input', 'description')
       +bt-form-text-field('Product price', 'Product price', 'product-price-input', 'price')
       +bt-form-text-field('Product amount', 'Product amount', 'product-amount-input', 'amount')

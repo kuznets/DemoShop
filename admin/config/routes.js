@@ -37,10 +37,14 @@ router.get('/products',
   productsPages.showProductsPage
 );
 router.get('/product/:slug/edit',
+  categories.findAllCategories,
   products.findOneProduct,
   productsPages.showEditPage
 );
-router.get('/product/create', productsPages.showCreatePage);
+router.get('/product/create', 
+  categories.findAllCategories, 
+  productsPages.showCreatePage
+);
 router.post('/product/create', products.createProduct);
 router.post('/product/:slug/update', products.updateProduct);
 router.get('/product/:slug/delete', products.deleteProduct);
