@@ -18,3 +18,5 @@ Onlime store testing implementation.
 * sitename/products - Production list
 * sitename/product/:slug - Product page
 * sitename/basket - Basket page
+
+* sitename/admin - Admin panel

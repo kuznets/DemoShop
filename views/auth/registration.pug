@@ -1,14 +1,14 @@
 extends ../layouts/auth-layout
+include /mixins/bootstrap/bt-button
+include /mixins/bootstrap/bt-form-text-field
 
 block content
   .col-lg-10.col-sm-10.col-xs-12
     section.registration-form
       h2 Registration.  
-      form
-        .form-group
-            label(for='exampleInputEmail1') Email address
-            input#exampleInputEmail1.form-control(type='email', placeholder='Email')
-        .form-group
-            label(for='exampleInputPassword1') Password
-            input#exampleInputPassword1.form-control(type='password', placeholder='Password')
-        button.btn.btn-default(type='submit') Submit
+      form(method='POST', action='/register')
+        +bt-form-text-field('Username', 'text', 'Username', 'username')
+        +bt-form-text-field('Email address', 'email', 'Email address', 'email')
+        +bt-form-text-field('Password', 'password', 'Password', 'password')
+        +bt-form-text-field('Confirm password', 'password', 'Confirm password', 'confirm')
+        +bt-button('Submit')

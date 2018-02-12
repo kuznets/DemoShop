@@ -1,4 +1,4 @@
-mixin bt-form-text-field(label, placeholder, id, name, value)
+mixin bt-form-text-field(label, type, placeholder, name, value)
   div.form-group
     label(for=id) #{label}
-    input.form-control(type='text', id=id, placeholder=placeholder, name=name, value=value)
+    input.form-control(type=type, placeholder=placeholder, name=name, value=value)

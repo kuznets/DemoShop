@@ -12,7 +12,7 @@ exports.showBasketPage = showBasketPage;
  * @return
  */
  function showBasketPage(req, res) {
-   res.render('./basket/basket', {
+   res.render('basket/basket', {
      title: 'Basket'
    });
  }

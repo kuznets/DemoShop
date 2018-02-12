@@ -7,6 +7,9 @@ module.exports = {
         local: 'mongodb://localhost:27017/demoshop',
         mlab: process.env.MONGODB_MLAB_URL
     },
+    auth: {
+        sessionSecret: process.env.SESSION_SECRET 
+    },
     paths: {
         views: path.resolve(__dirname, '..', 'views'),
         public: path.resolve(__dirname, '..', 'public'),

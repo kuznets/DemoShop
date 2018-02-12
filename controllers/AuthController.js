@@ -15,20 +15,10 @@
   * @return
   */
 function showRegisterPage(req, res) {
-  res.render('./auth/registration', {
+  res.render('auth/registration', {
     title: 'Register'
   });
 }
-
-/**
- * POST /register
- * Ragister new user
- * @method register
- * @return
- */
- function register(req, res) {
-   //TODO: Registrer user
- }
 
 /**
  * GET /login
@@ -37,17 +27,7 @@ function showRegisterPage(req, res) {
  * @return
  */
  function showLoginPage(req, res) {
-   res.render('./auth/login', {
+   res.render('auth/login', {
      title: 'Login'
    });
  }
-
- /**
-  * POST /logout
-  * Logout
-  * @method logout
-  * @return
-  */
-  function logout(req, res) {
-    //TODO: logout
-  }

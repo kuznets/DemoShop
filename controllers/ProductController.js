@@ -16,7 +16,7 @@ exports.showUpdatePage = showUpdatePage;
  * @return
  */
  function showProductsPage(req, res) {
-   res.render('./product/products', {
+   res.render('product/products', {
      title: 'Products',
    });
  }
@@ -28,7 +28,7 @@ exports.showUpdatePage = showUpdatePage;
   * @return
   */
   function showOneProductPage(req, res) {
-    res.render('./product/product', {
+    res.render('product/product', {
       title: 'Product description', 
     });
   }

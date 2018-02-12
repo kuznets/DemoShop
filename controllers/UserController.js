@@ -1,18 +1,21 @@
 /**
  * routes:
- *  /user/:id
+ *  /prodile
  */
 
-exports.showUserInfo = showUserInfo;
+exports.showUserProfile = showUserProfile;
 
 /**
- * GET /user/:id
+ * GET /profile
  * Return user info
- * @method showUserInfo
+ * @method showUserProfile
  * @return
  */
- function showUserInfo(req, res) {
-   res.render('./user/user', {
-     title: 'User page.'
-   });
- }
+function showUserProfile(req, res) {
+  if (!res.locals.user) {
+    res.redirect('/register');
+  }
+  res.render('user/profile', {
+    title: 'User page.'
+  });
+}

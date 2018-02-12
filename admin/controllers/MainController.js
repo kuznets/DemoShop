@@ -12,7 +12,7 @@ exports.showMainAdminPage = showMainAdminPage;
  * @return
  */
 function showMainAdminPage(req, res) {
-    res.render('./main/main', {
+    res.render('main/main', {
         title: 'Main',
     });
 }

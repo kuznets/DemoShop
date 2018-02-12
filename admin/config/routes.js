@@ -15,8 +15,8 @@ const categoriesPages = require('../controllers/CategoryController');
 const productsPages = require('../controllers/ProductController');
 
 //Middlewares
-const categories = require('../../middleware/categoriesMidleware');
-const products = require('../../middleware/productsMidleware');
+const categories = require('../../middleware/categoriesMiddleware');
+const products = require('../../middleware/productsMiddleware');
 
 //Categories routes
 router.get('/categories',

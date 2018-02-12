@@ -9,50 +9,78 @@ const express = require('express');
 const router = express.Router();
 
 //Routes
-const main = require('../controllers/MainController');
-const auth = require('../controllers/AuthController');
-const user = require('../controllers/UserController');
-const product = require('../controllers/ProductController');
-const basket = require('../controllers/BasketController');
+const mainPage = require('../controllers/MainController');
+const authPages = require('../controllers/AuthController');
+const userPages = require('../controllers/UserController');
+const productPages = require('../controllers/ProductController');
+const basketPages = require('../controllers/BasketController');
 
 //Middlewares
-const categories = require('../middleware/categoriesMidleware');
-const products = require('../middleware/productsMidleware');
+const categories = require('../middleware/categoriesMiddleware');
+const products = require('../middleware/productsMiddleware');
 const error = require('../middleware/error-handler');
+const auth = require('../middleware/authMiddleware');
+
+router.use(auth.userAuth);
 
 //Categories routes
 router.use(categories.findAllCategories);
 
-//Auth routes
-router.get('/register', auth.showRegisterPage);
-router.get('/login', auth.showLoginPage);
-//router.post('/register', auth.register);
-//router.post('/login', auth.login);
-//router.post('/logout', auth.logout);
-
-//Users routes
-router.get('/user/:id', user.showUserInfo);
-
-//Products routes
-router.get('/products', products.findAllProducts, product.showProductsPage);
-router.get('/product/:slug', products.findOneProduct, product.showOneProductPage);
-router.get('/product/create')
-  .get(product.showCreatePage)
-  .post(products.createProduct);
-router.route('/product/:slug/update')
-  .get(product.showUpdatePage)
-  .post(products.updateProduct);
-router.post('/product/:slug/delete', products.deleteProduct);
-
-
-//Basket routes
-router.get('/basket', basket.showBasketPage);
-
 //Main routes
 router.get('/', 
   products.findAllProducts, 
-  main.showMainPage
+  mainPage.showMainPage
 );
+
+//Auth routes
+router.get('/register',
+  auth.unauthenticated,
+  authPages.showRegisterPage
+);
+router.post('/register',
+  auth.unauthenticated,
+  auth.register
+);
+router.get('/login',
+  auth.unauthenticated,
+  authPages.showLoginPage
+);
+router.post('/login',
+  auth.unauthenticated,
+  auth.login
+);
+router.get('/logout',
+  auth.authenticated,
+  auth.logout
+);
+
+//Products routes
+router.get('/products', 
+  products.findAllProducts, 
+  productPages.showProductsPage
+);
+router.get('/product/:slug', 
+  products.findOneProduct, 
+  productPages.showOneProductPage
+);
+router.get('/product/create')
+  .get(productPages.showCreatePage)
+  .post(products.createProduct);
+router.route('/product/:slug/update')
+  .get(productPages.showUpdatePage)
+  .post(products.updateProduct);
+router.post('/product/:slug/delete', products.deleteProduct);
+
+//Access only for register users
+router.use(auth.authenticated);
+
+//Users routes
+router.get('/profile',
+  userPages.showUserProfile
+);
+
+//Basket routes
+router.get('/basket', basketPages.showBasketPage);
 
 //Error handler
 router.use(error.notFound);

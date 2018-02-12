@@ -12,7 +12,7 @@
   * @return
   */
   function showMainPage(req, res) {
-    res.render('./main/main', {
+    res.render('main/main', {
       title: 'Main',
     });
   }
