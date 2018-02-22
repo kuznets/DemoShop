@@ -1,9 +1,12 @@
 const express = require('express');
 const logger = require('morgan');
+const favicon = require('serve-favicon');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const flash = require('connect-flash');
 
 const db = require('./services/db');
+const passport = require('./services/passport/passport');
 const config = require('./config/app');
 const router = require('./config/routes');
 const admin = require('./admin');
@@ -22,6 +25,7 @@ app.use(logger('dev'));
 app.use(express.static(config.paths.public));
 app.use('/lib', express.static(config.paths.lib));
 app.use(express.urlencoded({ extended: false}));
+app.use(favicon(config.paths.favicon));
 app.use(session({
   name: 'sessionId',
   secret: config.auth.sessionSecret,
@@ -38,6 +42,18 @@ app.use(session({
     touchAfter: 3600*24 // 1 day
   })
 }));
+
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use((req, res, next) => {
+  if(req.user) {
+    res.locals.user = req.user;
+  }
+  next();
+});
 
 // ---------------------------------------------------------
 // Routes

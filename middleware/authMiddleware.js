@@ -2,8 +2,6 @@ const User = require('../models/user');
 
 /**
  * routes:
- * /register
- * /login
  * /logout
  */
 
@@ -48,44 +46,6 @@ module.exports = {
     if (!res.locals.user) return next();
 
     res.redirect('/');
-  },
-
-  /**
-  * POST /register
-  * Ragister new user
-  * @method register
-  * @return
-  */
-  register(req, res, next) {
-    if (!req.body.email || !req.body.password) return next(new Error('You must enter email and password'));
-    else if (req.body.password !== req.body.confirm) return next(new Error('Passwords must match'));
-
-    User.create(req.body)
-      .then(user => {
-        req.session.userId = user.id;
-        res.redirect('/profile');
-      })
-      .catch(next);
-  },
-
-  /**
-   * POST /login
-   * Logout
-   * @method login
-   * @return
-   */
-  login(req, res, next) {
-    if (!req.body.email || !req.body.password) {
-      let error = new Error('You must enter your login and password');
-      error.status = 401;
-      return next(error);
-    }
-    User.authenticate(req.body.email, req.body.password)
-      .then(user => {
-        req.session.userId = user.id;
-        res.redirect('/');
-      })
-      .catch(next);
   },
 
   /**

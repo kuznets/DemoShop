@@ -5,8 +5,12 @@ include /mixins/bootstrap/bt-form-text-field
 block content
   .col-lg-10.col-sm-10.col-xs-12
     section.login-form
-      h2 Login.  
+      h2 Login.
+      if message.length > 0
+        p.alert.alert-danger= message
       form(method='POST', action='/login')
         +bt-form-text-field('Email address', 'email', 'Email address', 'email')
         +bt-form-text-field('Password', 'password', 'Password', 'password')
         +bt-button('Submit')
+      a.login-btn(href='/auth/github')
+        button.btn.btn-default.navbar-btn.navbar-right(type='button') Github

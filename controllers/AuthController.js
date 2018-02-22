@@ -5,15 +5,15 @@
  *  /logout
  */
 
- exports.showRegisterPage = showRegisterPage;
- exports.showLoginPage = showLoginPage;
+exports.showRegisterPage = showRegisterPage;
+exports.showLoginPage = showLoginPage;
 
- /**
-  * GET /register
-  * Show register page
-  * @method showRegisterPage
-  * @return
-  */
+/**
+ * GET /register
+ * Show register page
+ * @method showRegisterPage
+ * @return
+ */
 function showRegisterPage(req, res) {
   res.render('auth/registration', {
     title: 'Register'
@@ -26,8 +26,10 @@ function showRegisterPage(req, res) {
  * @method showLoginPage
  * @return
  */
- function showLoginPage(req, res) {
-   res.render('auth/login', {
-     title: 'Login'
-   });
- }
+function showLoginPage(req, res) {
+  let message = req.flash('error');
+  res.render('auth/login', {
+    title: 'Login',
+    message
+  });
+}

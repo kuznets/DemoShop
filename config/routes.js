@@ -21,7 +21,8 @@ const products = require('../middleware/productsMiddleware');
 const error = require('../middleware/error-handler');
 const auth = require('../middleware/authMiddleware');
 
-router.use(auth.userAuth);
+//Services
+const passport = require('../services/passport/passport');
 
 //Categories routes
 router.use(categories.findAllCategories);
@@ -39,7 +40,10 @@ router.get('/register',
 );
 router.post('/register',
   auth.unauthenticated,
-  auth.register
+  passport.authenticate('local-register', {
+    failureRedirect: '/register',
+    successRedirect: '/'
+  })
 );
 router.get('/login',
   auth.unauthenticated,
@@ -47,7 +51,22 @@ router.get('/login',
 );
 router.post('/login',
   auth.unauthenticated,
-  auth.login
+  passport.authenticate('local-login', {
+    failureRedirect: '/login',
+    successRedirect: '/'
+  })
+);
+router.get('/auth/github',
+  auth.unauthenticated,
+  passport.authenticate('github')
+);
+router.get('/auth/github/callback', 
+  auth.unauthenticated,
+  passport.authenticate('github', {
+    failureRedirect: '/login',
+    successRedirect: '/',
+    failureFlash: true
+  })
 );
 router.get('/logout',
   auth.authenticated,

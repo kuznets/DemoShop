@@ -9,10 +9,14 @@ const User = new mongoose.Schema({
     trim: true,
     minlength: [7, 'Email is to short.'],
     maxlength: [256, 'Email is to long.'],
-    match: [/^[a-zA-Z0-9'._%+-]+@[a-zA-Z0-9-][a-zA-Z0-9.-]*\.[a-zA-Z]{2,63}$/, 'Неверный формат адреса электронной почты.']
+    match: [/^[a-zA-Z0-9'._%+-]+@[a-zA-Z0-9-][a-zA-Z0-9.-]*\.[a-zA-Z]{2,63}$/, 'Wrong e-mail address format.']
   },
   password: { type: String, required: true },
   username: String,
+  photo: String,
+  oauth: {
+    github: {}
+  }
 }, {
     timestamps: true
   });
@@ -35,6 +39,10 @@ User.post('save', function (error, user, next) {
     next(error);
   }
 });
+
+User.methods.isValidPassword = function(password) {
+  return bcrypt.compare(password, this.password);
+}
 
 User.statics.authenticate = function (email, password) {
   return this.findOne({ email })
