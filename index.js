@@ -7,6 +7,7 @@ const flash = require('connect-flash');
 
 const db = require('./shared/services/db');
 const passport = require('./shared/services/passport/passport');
+const error = require('./shared/middleware/error-handler');
 const config = require('./config/app');
 
 //Modules
@@ -62,6 +63,10 @@ app.use((req, res, next) => {
 // ---------------------------------------------------------
 app.use('/', main);
 app.use('/admin', admin);
+
+//Error handler
+app.use(error.notFound);
+app.use(app.get('env') === 'development' ? error.development : error.production);
 
 // START THE SERVER
 // =========================================================
