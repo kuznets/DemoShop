@@ -1,5 +1,7 @@
 const path = require('path');
 
+const ROOT_PATH = path.resolve(__dirname, '..');
+
 module.exports = {
   version: '1.0.0',
   port: process.env.PORT || 3000,
@@ -11,11 +13,10 @@ module.exports = {
     sessionSecret: process.env.SESSION_SECRET
   },
   paths: {
-    views: path.resolve(__dirname, '..', 'views'),
-    public: path.resolve(__dirname, '..', 'public'),
-    favicon: path.resolve(__dirname, '..', 'public', 'favicon.ico'),
-    lib: path.resolve(__dirname, '..', 'node_modules'),
-    middleware: path.resolve(__dirname, '..', 'middleware')
+    views: path.join(ROOT_PATH, 'shared', 'views'),
+    public: path.join(ROOT_PATH, 'shared', 'public'),
+    favicon: path.join(ROOT_PATH, 'shared', 'public', 'favicon.ico'),
+    lib: path.join(ROOT_PATH, 'node_modules')
   },
   oauth: {
     github: {

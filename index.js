@@ -5,11 +5,13 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
 
-const db = require('./services/db');
-const passport = require('./services/passport/passport');
+const db = require('./shared/services/db');
+const passport = require('./shared/services/passport/passport');
 const config = require('./config/app');
-const router = require('./config/routes');
+
+//Modules
 const admin = require('./admin');
+const main = require('./main');
 
 const app = express();
 
@@ -58,8 +60,8 @@ app.use((req, res, next) => {
 // ---------------------------------------------------------
 // Routes
 // ---------------------------------------------------------
+app.use('/', main);
 app.use('/admin', admin);
-app.use(router);
 
 // START THE SERVER
 // =========================================================

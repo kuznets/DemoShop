@@ -14,6 +14,7 @@ const User = new mongoose.Schema({
   password: { type: String, required: true },
   username: String,
   photo: String,
+  group: [],
   oauth: {
     github: {}
   }

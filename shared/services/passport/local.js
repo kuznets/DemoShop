@@ -10,14 +10,14 @@ const options = {
 
 passport.use('local-register', new LocalStrategy(options, (req, email, password, done) => {
   if (password !== req.body.confirm) return done(new Error('Passwords do not match'));
+  req.body.group = [];
+  req.body.group.push('user');
   User.create(req.body)
-      .then(user => {
-        done(null, user)
-      })
+      .then(user => done(null, user))
       .catch(done);
 }));
 
-passport.use('local-login', new LocalStrategy(options, (email, password, done) => {
+passport.use('local-login', new LocalStrategy(options, (req, email, password, done) => {
   User.findOne({email})
     .then(user => {
       if(!user) return done(null, false);

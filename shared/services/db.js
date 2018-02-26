@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const { mongodbUri } = require('../config/app');
+const { mongodbUri } = require('../../config/app');
 
 mongoose.Promise = global.Promise;
 mongoose.set('debug', true);

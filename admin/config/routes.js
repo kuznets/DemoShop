@@ -6,17 +6,20 @@
  * HTTP server.
  */
 
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 
-//Routes
+//Controllers
 const mainPage = require('../controllers/MainController');
 const categoriesPages = require('../controllers/CategoryController');
 const productsPages = require('../controllers/ProductController');
 
 //Middlewares
-const categories = require('../../middleware/categoriesMiddleware');
-const products = require('../../middleware/productsMiddleware');
+const categories = require('../../shared/middleware/categoriesMiddleware');
+const products = require('../../shared/middleware/productsMiddleware');
+const groups = require('../../shared/middleware/groupsMiddleware');
+
+//Verify admin rights
+router.use(groups.isAdminGroup);
 
 //Categories routes
 router.get('/categories',
@@ -33,6 +36,7 @@ router.get('/category/:slug/delete', categories.deleteCategory);
 
 //Products routes
 router.get('/products',
+  categories.findAllCategories,
   products.findAllProducts,
   productsPages.showProductsPage
 );
