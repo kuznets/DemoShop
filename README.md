@@ -14,16 +14,28 @@ Online store testing implementation.
 * User Sign in
 * User Sign out
 
-### Current routes
-* sitename/ - Home page
-* sitename/register - Registration page
-* sitename/login - Authorization page
-* sitename/products - Production list
-* sitename/product/:slug - Product page
+3. API module
+* Receiving products
+* Add, Edit and Delete product for authorization user
+* Token authorization
 
-* sitename/admin - Admin panel
-* sitename/admin/products - Admin panel for products
-* sitename/admin/categories - Admin panel for categories
+### Current routes
+* sitename/ - Home page.
+* sitename/register - Registration page.
+* sitename/login - Authorization page.
+* sitename/products - Production list.
+* sitename/product/:slug - Product page.
+
+* sitename/admin - Admin panel.
+* sitename/admin/products - Admin panel for products.
+* sitename/admin/categories - Admin panel for categories.
+
+* GET sitename/api/products - Get products list.
+* GET sitename/api/product/:slug - Get one product.
+* POST sitename/api/product - Add new product.
+* PUT sitename/api/product/:slug - Editing product.
+* DELETE sitename/api/product/:slug - Product delete.
+* POST sitename/api/token - Authorization. Get the token.
 
 ### How to start application.
 
@@ -50,6 +62,7 @@ Create file .env in the project root directory and to fill the fields:
     MONGODB_MLAB_PWD=
     MONGODB_MLAB_URL=
     SESSION_SECRET=
+    JWT_SECRET=
 
     GITHUB_CLIENT_ID=
     GITHUB_CLIENT_SECRET=

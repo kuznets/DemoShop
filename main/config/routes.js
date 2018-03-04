@@ -81,11 +81,9 @@ router.get('/logout',
   auth.logout
 );
 
-//Access only for register users
-router.use(auth.authenticated);
-
 //Users routes
 router.get('/profile',
+  auth.authenticated,
   userPages.showUserProfile
 );
 

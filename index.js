@@ -13,6 +13,7 @@ const config = require('./config/app');
 //Modules
 const admin = require('./admin');
 const main = require('./main');
+const api = require('./api');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(logger('dev'));
 app.use(express.static(config.paths.public));
 app.use('/lib', express.static(config.paths.lib));
 app.use(express.urlencoded({ extended: false}));
+app.use(express.json());
 app.use(favicon(config.paths.favicon));
 app.use(session({
   name: 'sessionId',
@@ -63,6 +65,8 @@ app.use((req, res, next) => {
 // ---------------------------------------------------------
 app.use('/', main);
 app.use('/admin', admin);
+app.use('/api', api);
+
 
 //Error handler
 app.use(error.notFound);

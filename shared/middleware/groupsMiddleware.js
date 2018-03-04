@@ -3,7 +3,7 @@ module.exports = {
 
   /**
   * Verify the Users rights for page access.
-  * @method userAuth
+  * @method isAdminGroup
   * @return
   */
   isAdminGroup(req, res, next) {

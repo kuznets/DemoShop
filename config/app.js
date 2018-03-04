@@ -9,14 +9,15 @@ module.exports = {
     local: 'mongodb://localhost:27017/demoshop',
     mlab: process.env.MONGODB_MLAB_URL
   },
-  auth: {
-    sessionSecret: process.env.SESSION_SECRET
-  },
   paths: {
     views: path.join(ROOT_PATH, 'shared', 'views'),
     public: path.join(ROOT_PATH, 'shared', 'public'),
     favicon: path.join(ROOT_PATH, 'shared', 'public', 'favicon.ico'),
     lib: path.join(ROOT_PATH, 'node_modules')
+  },
+  auth: {
+    sessionSecret: process.env.SESSION_SECRET,
+    jwtSecret: process.env.JWT_SECRET
   },
   oauth: {
     github: {

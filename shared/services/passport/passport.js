@@ -3,6 +3,7 @@ const User = require('../../models/user');
 
 require('./local');
 require('./github');
+require('./jwt');
 
 passport.serializeUser((user, done) => done(null, user._id)); 
 passport.deserializeUser((userId, done) => User.findById(userId, done));
