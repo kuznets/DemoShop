@@ -17,7 +17,7 @@ module.exports = {
   },
   auth: {
     sessionSecret: process.env.SESSION_SECRET,
-    jwtSecret: process.env.JWT_SECRET
+    jwtSecret: process.env.JWT_SECRET,
   },
   oauth: {
     github: {

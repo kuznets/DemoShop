@@ -7,10 +7,13 @@ const options = {
   secretOrKey: config.auth.jwtSecret,
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
 };
+console.log('JWT.JS');
 
 passport.use(new Strategy(options, (payload, done) => {
+  console.log('PAYLOAD', payload);
   User.findById(payload.id)
     .then(user => {
+      console.log('USER', user);
       if (!user) return done(null, false);
       if ( user.group.indexOf('admin') == -1 ) return done(null, false);
 

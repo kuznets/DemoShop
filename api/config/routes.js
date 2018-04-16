@@ -6,15 +6,19 @@
  * HTTP server.
  */
 
+const mongoose = require('mongoose');
 const router = require('express').Router();
 const passport = require('passport');
 const cache =  require('apicache').middleware;
 
+const Product = require('../../shared/models/product');
+const User = require('../../shared/models/user');
+
 //Controllers
-const productsController = require('../controllers/ProductController');
+const productsController = require('../controllers/ProductController')(Product);
 const authController = require('../controllers/authController');
 //Middleware
-const auth = require('../middleware/authMiddleware');
+const auth = require('../middleware/authMiddleware')(User);
 
 //Unauthenticated routes
 //Products routes

@@ -9,11 +9,16 @@ const db = require('./shared/services/db');
 const passport = require('./shared/services/passport/passport');
 const error = require('./shared/middleware/error-handler');
 const config = require('./config/app');
+const dotenv = require("dotenv");
 
 //Modules
 const admin = require('./admin');
 const main = require('./main');
 const api = require('./api');
+
+//Set the environment
+const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
+dotenv.config({ path: envFile });
 
 const app = express();
 

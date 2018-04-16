@@ -15,6 +15,7 @@ const limit = new RateLimit({
 
 api.use(cors());
 api.use(limit);
+api.use(express.json());
 
 // ---------------------------------------------------------
 // Routes
