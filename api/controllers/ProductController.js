@@ -37,10 +37,8 @@ module.exports = Product => ({
    * @return JSON
    */
   createProduct(req, res, next) {
-    console.log('BODY', req.body);
     return Product.create(req.body)
       .then(product => {
-        console.log('PRODUCT', product);
         res.status(201).json(product);
       })
       .catch(next);
