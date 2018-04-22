@@ -16,7 +16,6 @@ module.exports = User => ({
   * @return
   */
   login(req, res, next) {
-    //console.log('START Login');
     if (!req.body.email || !req.body.password) return res.sendStatus(401);
     return User.findOne({ email: req.body.email })
       .then(user => {
