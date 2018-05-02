@@ -9,7 +9,8 @@ const db = require('./shared/services/db');
 const passport = require('./shared/services/passport/passport');
 const error = require('./shared/middleware/error-handler');
 const config = require('./config/app');
-const dotenv = require("dotenv");
+const dotenv = require('dotenv');
+const helmet = require('helmet')
 
 //Modules
 const admin = require('./admin');
@@ -22,6 +23,7 @@ dotenv.config({ path: envFile });
 
 const app = express();
 
+app.use(helmet());
 app.set('view engine', 'pug');
 app.set('views', config.paths.views);
 
