@@ -23,7 +23,13 @@ module.exports = User => ({
         if (!user.isValidPassword(req.body.password)) return res.sendStatus(401);
         let payload = { id: user.id };
         let token = jwt.encode(payload, config.auth.jwtSecret);
-        res.locals.token = token;
+        let result = {};
+        Object.assign(result, { 
+          'email': user.email, 
+          'group': user.group, 
+          'token': token
+        });
+        res.locals.user = result;
         next();
       })
       .catch(next);

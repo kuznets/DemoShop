@@ -12,8 +12,7 @@ exports.login = login;
  * @return JSON
  */
 function login(req, res, next) {
-  const token = res.locals.token;
-  if (!token) return res.sendStatus(401);
-
-  res.json({ token });
+  const user = res.locals.user;
+  if (!user) return res.sendStatus(401);
+  res.json({ user });
 }
