@@ -34,6 +34,12 @@ router.post('/token',
   authController.login
 );
 
+// Registration new user
+router.post('/register',
+  auth.register,
+  authController.register
+);
+
 //Authenticated routes
 //Authentication with token
 router.use(passport.authenticate('jwt', { session: false }));
