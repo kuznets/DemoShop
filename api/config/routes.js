@@ -12,10 +12,12 @@ const passport = require('passport');
 const cache =  require('apicache').middleware;
 
 const Product = require('../../shared/models/product');
+const Cart = require('../../shared/models/cart');
 const User = require('../../shared/models/user');
 
 //Controllers
 const productsController = require('../controllers/ProductController')(Product);
+const cartController = require('../controllers/cartController')(Cart, Product);
 const authController = require('../controllers/authController');
 //Middleware
 const auth = require('../middleware/authMiddleware')(User);
@@ -26,7 +28,7 @@ router.get('/products',
   cache('1 minute'),
   productsController.findAllProducts
 );
-router.get('/product/:slug', productsController.getOneProduct)
+router.get('/product/:slug', productsController.getOneProduct);
 
 //Login with emain and password
 router.post('/token',
@@ -50,6 +52,12 @@ router.post('/product', productsController.createProduct);
 router.put('/product/:slug', productsController.updateOneProduct);
 router.delete('/product/:slug', productsController.deleteOneProduct);
 
+
+// Cart routes
+router.post('/cart', cartController.createCartProducts);
+router.get('/cart', cartController.getCartProducts);
+router.put('/cart/:id', cartController.putCartProduct);
+router.delete('/cart/:id', cartController.deleteCartProduct);
 
 
 module.exports = router;
