@@ -56,7 +56,8 @@ router.delete('/product/:slug', productsController.deleteOneProduct);
 // Cart routes
 router.post('/cart', cartController.createCartProducts);
 router.get('/cart', cartController.getCartProducts);
-router.put('/cart/:id', cartController.putCartProduct);
+router.put('/cart/:id/add', cartController.addCartProduct);
+router.put('/cart/:id/remove', cartController.removeCartProduct);
 router.delete('/cart/:id', cartController.deleteCartProduct);
 
 

@@ -72,13 +72,12 @@ module.exports = (Cart, Product) => ({
     },
 
     /**
-     * PUT /api/cart/:id
+     * PUT /api/cart/:id/add
      * Return the operation status.
-     * @method putCartProduct
+     * @method addCartProduct
      * @return JSON
      */
-    putCartProduct(req, res, next){           console.log(req.body, req.params, req.query);
-
+    addCartProduct(req, res, next){
         if(!req.body.product_id || !req.body.price) return res.status(200).json({message: 'Not heave product_id or price in request.'});
 
         return Cart.find({_id: req.params.id})
@@ -86,8 +85,41 @@ module.exports = (Cart, Product) => ({
                 let params = data;
 
                 params.products.push(req.body.product_id);
-                params.total_price = params.total_price + eq.body.price;
+                params.total_price = params.total_price + req.body.price;
                 params.count++;
+
+                return Cart.save(params)
+                    .then(() => {
+                        res.status(200).json({status: 'success'});
+                    })
+                    .catch(() => {
+                        res.status(201).json({status: 'error'});
+                    });
+            })
+            .catch(next);
+    },
+
+    /**
+     * PUT /api/cart/:id/remove
+     * Return the operation status.
+     * @method removeCartProduct
+     * @return JSON
+     */
+    removeCartProduct(req, res, next){
+        if(!req.body.product_id || !req.body.price) return res.status(200).json({message: 'Not heave product_id or price in request.'});
+
+        return Cart.find({_id: req.params.id})
+            .then(data => {
+                let params = data,
+                    products = [];
+
+                params.products.forEach(item => {
+                    if(req.body.product_id != item) products.push(item);
+                });
+
+                params.products = products;
+                params.total_price = params.total_price - req.body.price;
+                params.count--;
 
                 return Cart.save(params)
                     .then(() => {
