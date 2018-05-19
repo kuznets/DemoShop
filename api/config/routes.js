@@ -58,7 +58,7 @@ router.post('/cart', cartController.createCartProducts);
 router.get('/cart', cartController.getCartProducts);
 router.put('/cart/:id/add', cartController.addCartProduct);
 router.put('/cart/:id/remove', cartController.removeCartProduct);
-router.delete('/cart/:id', cartController.deleteCartProduct);
+router.delete('/cart/:id', cartController.deleteCart);
 
 
 module.exports = router;
