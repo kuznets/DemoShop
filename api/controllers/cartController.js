@@ -139,7 +139,7 @@ module.exports = (Cart, Product) => ({
      * @return JSON
      */
     deleteCart(req, res, next){
-        return Cart.remove({id: req.params.id})
+        return Cart.remove({_id: req.params.id})
             .then(data => {
                 res.status(200).json(data);
             })
