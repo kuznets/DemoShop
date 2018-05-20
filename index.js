@@ -87,3 +87,8 @@ app.use(app.get('env') === 'development' ? error.development : error.production)
 app.listen(config.port, () => {
   console.log('App is listening on port ' + config.port);
 });
+
+// STOP SERVER
+process.on('SIGTERM', () => {
+  app.close();
+});
