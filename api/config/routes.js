@@ -12,6 +12,7 @@ const passport = require('passport');
 const cache =  require('apicache').middleware;
 
 const Product = require('../../shared/models/product');
+const Category = require('../../shared/models/category');
 const Cart = require('../../shared/models/cart');
 const User = require('../../shared/models/user');
 
@@ -19,6 +20,7 @@ const User = require('../../shared/models/user');
 const productsController = require('../controllers/ProductController')(Product);
 const cartController = require('../controllers/cartController')(Cart, Product);
 const authController = require('../controllers/authController');
+const categoriesController = require('../controllers/categoriesController')(Category);
 //Middleware
 const auth = require('../middleware/authMiddleware')(User);
 
@@ -28,7 +30,16 @@ router.get('/products',
   cache('1 minute'),
   productsController.findAllProducts
 );
-router.get('/product/:slug', productsController.getOneProduct);
+router.get('/product/:slug', 
+  cache('5 minute'),
+  productsController.getOneProduct
+);
+
+// Categories routes
+router.get('/categories',
+  cache('5 minute'),
+  categoriesController.findAllCategories
+);
 
 //Login with emain and password
 router.post('/token',

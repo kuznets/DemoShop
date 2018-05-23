@@ -9,7 +9,7 @@ const api = express();
 
 const limit = new RateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: 3, // limit each IP to 3 requests per windowMs
+  max: 10, // limit each IP to 3 requests per windowMs
   delayMs: 0 // disable delaying - full speed until the max limit is reached
 });
 
