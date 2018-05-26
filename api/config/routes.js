@@ -12,6 +12,7 @@ const passport = require('passport');
 const cache =  require('apicache').middleware;
 
 const Product = require('../../shared/models/product');
+const Category = require('../../shared/models/category');
 const Cart = require('../../shared/models/cart');
 const User = require('../../shared/models/user');
 const Orders = require('../../shared/models/orders');
@@ -21,6 +22,7 @@ const productsController = require('../controllers/ProductController')(Product);
 const cartController = require('../controllers/cartController')(Cart, Product);
 const ordersController = require('../controllers/ordersController')(Orders, Product);
 const authController = require('../controllers/authController');
+const categoriesController = require('../controllers/categoriesController')(Category);
 //Middleware
 const auth = require('../middleware/authMiddleware')(User);
 
@@ -30,7 +32,16 @@ router.get('/products',
   cache('1 minute'),
   productsController.findAllProducts
 );
-router.get('/product/:slug', productsController.getOneProduct);
+router.get('/product/:slug', 
+  cache('5 minute'),
+  productsController.getOneProduct
+);
+
+// Categories routes
+router.get('/categories',
+  cache('5 minute'),
+  categoriesController.findAllCategories
+);
 
 // Orders routes
 router.post('/orders', ordersController.createOrder);
@@ -67,7 +78,8 @@ router.delete('/product/:slug', productsController.deleteOneProduct);
 // Cart routes
 router.post('/cart', cartController.createCartProducts);
 router.get('/cart', cartController.getCartProducts);
-router.put('/cart/:id', cartController.putCartProduct);
-router.delete('/cart/:id', cartController.deleteCartProduct);
+router.put('/cart/:id/add', cartController.addCartProduct);
+router.put('/cart/:id/remove', cartController.removeCartProduct);
+router.delete('/cart/:id', cartController.deleteCart);
 
 module.exports = router;
