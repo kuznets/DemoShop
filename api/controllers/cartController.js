@@ -4,28 +4,6 @@
  * /api/cart/:id
  */
 
-const getProductsList = (Product, productsArray) => {
-    return Product.find({_id: { $all: productsArray }})
-        .then(list => {
-            return list;
-        })
-        .catch(err => {
-            console.log(err);
-            return false;
-        });
-};
-
-const findCart = (Cart, uid) => {
-    return Cart.findOne({uid: {$eq: uid}})
-        .then(data => {
-            return data;
-        })
-        .catch(err => {
-            console.log(err);
-            return false;
-        });
-};
-
 module.exports = (Cart, Product) => ({
     /**
      * POST /api/cart
@@ -37,13 +15,14 @@ module.exports = (Cart, Product) => ({
         if(!req.body.uid) {
             return res.status(404).json({message: 'Non send uid.'});
         } else {
-            let cart = findCart(Cart, req.body.uid);
-
-            if(cart) return res.status(200).json(cart);
-
-            return Cart.create(req.body)
-                .then(data => {
-                    res.status(201).json(data);
+            Cart.findOne({uid: {$eq: req.body.uid}})
+                .then(cart => {
+                    if(cart) return res.status(200).json(cart);
+                    Cart.create(req.body)
+                        .then(data => {
+                            res.status(201).json(data);
+                        })
+                        .catch(next);
                 })
                 .catch(next);
         }
@@ -59,11 +38,36 @@ module.exports = (Cart, Product) => ({
         if(req.query.card_id){
             return Cart.find({_id: req.query.card_id})
                 .then(data => {
-                    let products = getProductsList(Product, data.products), list = data;
-                    
-                    list.products = products;
+                    let productIDs = [],
+                        parsed = [];
+                    data.products.forEach(item => {
+                        let splited = item.split(':'); // product list format id:count => iecueviur493:5
+                        productIDs.push(splited[0]);
+                        parsed.push({id: splited[0], count: splited[1]});
+                    });
+                    Product.find(
+                            {_id: { $all: data.products }},
+                            {category: 0, description: 0}
+                        )
+                        .then(products => {
+                            let list = [];
+                            products.forEach(product => {
+                                parsed.forEach(order => {
+                                    if (product._id == order.id) {
+                                        product.count = order.id;
+                                        list.push(product);
+                                    }
+                                });
+                            });
 
-                    res.status(200).json(list);
+                            data.products = list;
+
+                            res.status(200).json(data);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            return false;
+                        });
                 })
                 .catch(next);
         } else {
@@ -78,17 +82,17 @@ module.exports = (Cart, Product) => ({
      * @return JSON
      */
     addCartProduct(req, res, next){
-        if(!req.body.product_id || !req.body.price) return res.status(200).json({message: 'Not heave product_id or price in request.'});
+        if(!req.body.product || !req.body.price) return res.status(200).json({message: 'Not heave product or price in request.'});
 
         return Cart.find({_id: req.params.id})
             .then(data => {
                 let params = data;
 
-                params.products.push(req.body.product_id);
+                params.products.push(req.body.product);
                 params.total_price = params.total_price + req.body.price;
                 params.count++;
 
-                return Cart.save(params)
+                return Cart.findOneAndUpdate({_id: req.params.id}, params)
                     .then(() => {
                         res.status(200).json({status: 'success'});
                     })
@@ -106,7 +110,7 @@ module.exports = (Cart, Product) => ({
      * @return JSON
      */
     removeCartProduct(req, res, next){
-        if(!req.body.product_id || !req.body.price) return res.status(200).json({message: 'Not heave product_id or price in request.'});
+        if(!req.body.product || !req.body.price) return res.status(200).json({message: 'Not heave product or price in request.'});
 
         return Cart.find({_id: req.params.id})
             .then(data => {
@@ -114,14 +118,14 @@ module.exports = (Cart, Product) => ({
                     products = [];
 
                 params.products.forEach(item => {
-                    if(req.body.product_id != item) products.push(item);
+                    if(req.body.product.split(':')[0] != item.split(':')[0]) products.push(item); // product list format id:count => iecueviur493:5
                 });
 
                 params.products = products;
                 params.total_price = params.total_price - req.body.price;
                 params.count--;
 
-                return Cart.save(params)
+                return Cart.findOneAndUpdate({_id: req.params.id}, params)
                     .then(() => {
                         res.status(200).json({status: 'success'});
                     })
