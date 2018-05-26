@@ -14,10 +14,12 @@ const cache =  require('apicache').middleware;
 const Product = require('../../shared/models/product');
 const Cart = require('../../shared/models/cart');
 const User = require('../../shared/models/user');
+const Orders = require('../../shared/models/orders');
 
 //Controllers
 const productsController = require('../controllers/ProductController')(Product);
 const cartController = require('../controllers/cartController')(Cart, Product);
+const ordersController = require('../controllers/ordersController')(Orders, Product);
 const authController = require('../controllers/authController');
 //Middleware
 const auth = require('../middleware/authMiddleware')(User);
@@ -30,6 +32,15 @@ router.get('/products',
 );
 router.get('/product/:slug', productsController.getOneProduct);
 
+// Orders routes
+router.post('/orders', ordersController.createOrder);
+
+
+// Orders routes
+router.get('/orders', ordersController.getOrders);
+router.get('/order/:id', ordersController.getOrder);
+router.put('/order/:id', ordersController.putOrder);
+router.delete('/order/:id', ordersController.deleteOrder);
 //Login with emain and password
 router.post('/token',
   auth.login,
@@ -58,6 +69,5 @@ router.post('/cart', cartController.createCartProducts);
 router.get('/cart', cartController.getCartProducts);
 router.put('/cart/:id', cartController.putCartProduct);
 router.delete('/cart/:id', cartController.deleteCartProduct);
-
 
 module.exports = router;
