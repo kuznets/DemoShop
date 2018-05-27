@@ -41,9 +41,9 @@ module.exports = (Cart, Product) => ({
                     let productIDs = [],
                         parsed = [];
                     data.products.forEach(item => {
-                        let splited = item.split(':'); // product list format id:count => iecueviur493:5
+                        let splited = item.split(':'); // product list format id:amount => 5b03ad3b60b4263ee82c274a:5
                         productIDs.push(splited[0]);
-                        parsed.push({id: splited[0], count: splited[1]});
+                        parsed.push({id: splited[0], amount: splited[1]});
                     });
                     Product.find(
                             {_id: { $all: data.products }},
@@ -54,7 +54,7 @@ module.exports = (Cart, Product) => ({
                             products.forEach(product => {
                                 parsed.forEach(order => {
                                     if (product._id == order.id) {
-                                        product.count = order.id;
+                                        product.amount = order.id;
                                         list.push(product);
                                     }
                                 });
@@ -118,7 +118,7 @@ module.exports = (Cart, Product) => ({
                     products = [];
 
                 params.products.forEach(item => {
-                    if(req.body.product.split(':')[0] != item.split(':')[0]) products.push(item); // product list format id:count => iecueviur493:5
+                    if(req.body.product.split(':')[0] != item.split(':')[0]) products.push(item); // product list format id:amount => 5b03ad3b60b4263ee82c274a:5
                 });
 
                 params.products = products;
