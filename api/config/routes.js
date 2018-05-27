@@ -43,15 +43,17 @@ router.get('/categories',
   categoriesController.findAllCategories
 );
 
+// Cart routes
+router.post('/cart', cartController.createCartProducts);
+router.get('/cart', cartController.getCartProducts);
+router.put('/cart/:id/add', cartController.addCartProduct);
+router.put('/cart/:id/remove', cartController.removeCartProduct);
+router.delete('/cart/:id', cartController.deleteCart);
+
 // Orders routes
 router.post('/orders', ordersController.createOrder);
 
 
-// Orders routes
-router.get('/orders', ordersController.getOrders);
-router.get('/order/:id', ordersController.getOrder);
-router.put('/order/:id', ordersController.putOrder);
-router.delete('/order/:id', ordersController.deleteOrder);
 //Login with emain and password
 router.post('/token',
   auth.login,
@@ -75,11 +77,10 @@ router.put('/product/:slug', productsController.updateOneProduct);
 router.delete('/product/:slug', productsController.deleteOneProduct);
 
 
-// Cart routes
-router.post('/cart', cartController.createCartProducts);
-router.get('/cart', cartController.getCartProducts);
-router.put('/cart/:id/add', cartController.addCartProduct);
-router.put('/cart/:id/remove', cartController.removeCartProduct);
-router.delete('/cart/:id', cartController.deleteCart);
+// Orders routes
+router.get('/orders', ordersController.getOrders);
+router.get('/order/:id', ordersController.getOrder);
+router.put('/order/:id', ordersController.putOrder);
+router.delete('/order/:id', ordersController.deleteOrder);
 
 module.exports = router;
