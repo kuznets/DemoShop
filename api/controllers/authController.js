@@ -40,7 +40,7 @@ function register(req, res, next) {
  * @return 
  */
 function isUser(req, res, next) {
-  if (req.user.group.indexOf('user') == -1 ) return next();
+  if (req.user.group.indexOf('user') !== -1 ) return next();
   return res.status(401).send(`You don don't have permission for this action`);
 }
 
@@ -51,6 +51,6 @@ function isUser(req, res, next) {
  * @return 
  */
 function isAdmin(req, res, next) {
-  if (req.user.group.indexOf('admin') == -1 ) return next();
+  if (req.user.group.indexOf('admin') !== -1 ) return next();
   return res.status(401).send(`You don don't have permission for this action`);
 }
