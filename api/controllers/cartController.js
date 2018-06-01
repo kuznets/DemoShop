@@ -2,8 +2,57 @@
  * routes:
  * /api/cart
  * /api/cart/:id
+ * /api/cart/:id/add
+ * /api/cart/:id/remove
  */
+let returnedCartList = (data, Product, res) => {
+    let productIDs = [],
+        parsed = [];
+    console.log(12,data.products);
+    // return   res.status(200).json(data);
+    data.products.forEach(item => {
+        //console.log(productIDs, parsed, item);
 
+        let splited = item.split(':'); // product list format id:amount_order => 5b03ad3b60b4263ee82c274a:5
+        productIDs.push(splited[0]);
+        parsed.push({id: splited[0], amount_order: splited[1]});
+
+    });
+    Product.find(
+        {_id: {$in: productIDs}},
+        {category: 0, description: 0}
+    )
+        .then(products => {
+            let list = [];
+            products.forEach(product => {
+                parsed.forEach(order => {
+                  //  console.log(29, products, product._id, order.id);
+                    if (product._id == order.id) {
+                        let obj = {
+                            price: product.price,
+                            amount: product.amount,
+                            _id: product._id,
+                            title: product.title,
+                            slug: product.slug,
+                            img_url: product.img_url,
+                            amount_order: order.amount_order
+                        };
+
+                        list.push(obj);
+                    }
+                });
+            });
+
+            data.products = list;
+            //console.log('list',list);
+
+            res.status(200).json(data);
+        })
+        .catch(err => {
+            console.log(err);
+            return false;
+        });
+};
 module.exports = (Cart, Product) => ({
     /**
      * POST /api/cart
@@ -35,46 +84,10 @@ module.exports = (Cart, Product) => ({
      * @return JSON
      */
     getCartProducts(req, res, next){
-        if(req.query.cart_id){
+        if(req.query.cart_id) {
             return Cart.find({_id: req.query.cart_id})
                 .then(data => {
-                    let productIDs = [],
-                        parsed = [];
-                    data = data[0];
-                    // return   res.status(200).json(data);
-                    data.products.forEach(item => {
-                        //console.log(productIDs, parsed, item);
-
-                        let splited = item.split(':'); // product list format id:amount_order => 5b03ad3b60b4263ee82c274a:5
-                        productIDs.push(splited[0]);
-                        parsed.push({id: splited[0], amount_order: splited[1]});
-
-                    });
-                    Product.find(
-                            {_id: { $all: productIDs }},
-                            {category: 0, description: 0}
-                        )
-                        .then(products => {
-                            let list = [];
-                            products.forEach(product => {
-                                parsed.forEach(order => {
-                                    console.log(product._id, order.id);
-                                    if (product._id == order.id) {
-                                        product.price = product.price * order.amount_order;
-                                        product.amount_order = order.amount_order;
-                                        list.push(product);
-                                    }
-                                });
-                            });
-
-                            data.products = list;
-
-                            res.status(200).json(data);
-                        })
-                        .catch(err => {
-                            console.log(err);
-                            return false;
-                        });
+                    returnedCartList(data[0], Product, res);
                 })
                 .catch(next);
         } else {
@@ -91,42 +104,48 @@ module.exports = (Cart, Product) => ({
     addCartProduct(req, res, next){
         if(!req.body.product || !req.body.price) return res.status(200).json({message: 'Not heave product or price in request.'});
 
-        return Cart.find({_id: req.params.id})
+        Cart.find({_id: req.params.id})
             .then(data => {
                 let params = data[0],
-                    upd = false,
-                    amount = 1;
+                    amount = 1,
+                    prods = [];
 
-                if ( params.products.length) {
-                    params.products.forEach((item, key) => {
-                       // console.log(req.body.product, item, key);
-                        if (item.indexOf(req.body.product)) {
+                if (params.products.length > 0) {
+                    if (params.products.join().indexOf(req.body.product) >= 0) {
+                        params.products.forEach(item => {
                             let splited = item.split(':');
-                            //console.log(item, key, splited);
-                            amount = Number(splited[1]) + 1;
+                            //console.log('117 string', req.body.product, item, splited[0], splited[0] === req.body.product);
 
-                            console.log('amount', params.products[key]);
-                            params.products[key] = `${req.body.product}:${amount}`;
-                            upd = true;
-                        }
-                    });
-                }
+                            if (splited[0] == req.body.product) {
+                                amount = Number(splited[1]) + 1;
+                                prods.push(`${splited[0]}:${amount}`);
+                            } else {
+                                prods.push(item);
+                            }
+                        });
+                    } else {
+                        //console.log(`125 test   ---    ${req.body.product}:${amount}`);
+                        prods = params.products;
+                        prods.push(`${req.body.product}:${amount}`);
+                    }
 
-                if (!upd || !params.products.length) {
+                    //console.log(132, params.products, prods);
+                    params.products = prods;
+                } else {
                     params.products.push(`${req.body.product}:${amount}`);
                     params.count++;
                 }
 
-                params.total_price = (params.total_price>0 ? params.total_price - req.body.price : 0) + (req.body.price * amount);
+                //console.log(139, params, params.products);
+                params.total_price = (params.total_price > 0 ? params.total_price - req.body.price : 0) + (req.body.price * amount);
 
                 //console.log(params);
-                return Cart.findOneAndUpdate({_id: req.params.id}, params)
+                Cart.findOneAndUpdate({_id: req.params.id}, params, {new: true})
                     .then(sevedData => {
-                        res.status(200).json(sevedData);
+                        console.log(142, sevedData);
+                        returnedCartList(sevedData, Product, res);
                     })
-                    .catch(() => {
-                        res.status(201).json({status: 'error'});
-                    });
+                    .catch(next);
             })
             .catch(next);
     },
@@ -140,28 +159,33 @@ module.exports = (Cart, Product) => ({
     removeCartProduct(req, res, next){
         if(!req.body.product || !req.body.price) return res.status(200).json({message: 'Not heave product or price in request.'});
 
-        console.log(req.body, req.params, req.query);
+        //console.log(req.body, req.params, req.query);
 
         return Cart.find({_id: req.params.id})
             .then(data => {
                 let params = data[0],
-                    products = [];
+                    products = [],
+                    amount = 1;
 
                 params.products.forEach(item => {
-                    if(item.indexOf(req.body.product) < 0) products.push(item); // product list format id:amount_order => 5b03ad3b60b4263ee82c274a:5
+                    console.log(172, item.indexOf(req.body.product), item);
+                    if(item.indexOf(req.body.product) < 0) {
+                        products.push(item);
+                    } else {
+                        amount = item.split(':')[1];// product list format id:amount_order => 5b03ad3b60b4263ee82c274a:5
+                    }
                 });
 
+                console.log(180, params.products, products);
                 params.products = products;
-                params.total_price = params.total_price - req.body.price;
+                params.total_price = params.total_price - (req.body.price * amount);
                 params.count--;
 
-                return Cart.findOneAndUpdate({_id: req.params.id}, params)
+                Cart.findOneAndUpdate({_id: req.params.id}, params, {new: true})
                     .then(sevedData => {
-                        res.status(200).json(sevedData);
+                        returnedCartList(sevedData, Product, res);
                     })
-                    .catch(() => {
-                        res.status(201).json({status: 'error'});
-                    });
+                    .catch(next);
             })
             .catch(next);
     },
