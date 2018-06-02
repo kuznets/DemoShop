@@ -3,6 +3,7 @@
  * /api/cart
  * /api/cart/:id
  * /api/cart/:id/add
+ * /api/cart/:id/update
  * /api/cart/:id/remove
  */
 let returnedCartList = (data, Product, res) => {
@@ -188,6 +189,57 @@ module.exports = (Cart, Product) => ({
                     .catch(next);
             })
             .catch(next);
+    },
+
+    /**
+     * PUT /api/cart/:id/update
+     * Return the operation object.
+     * @method updateProductInCart
+     * @return JSON
+     */
+    updateProductInCart(req, res, next){
+        if(!req.body.product || !req.body.amount_order) return res.status(400).json({message: 'Not heave product or amount_order in request.'});
+
+        return Cart.find({_id: req.params.id})
+            .then(data => {
+                let params = data[0],
+                    products = [],
+                    amount = 1;
+
+                params.products.forEach(item => {
+                    let splited = item.split(':');
+                    if (splited[0] == req.body.product) {
+                        products.push(`${req.body.product}:${req.body.amount_order}`);
+                    } else {
+                        products.push(item);
+                    }
+                });
+
+                console.log(218, params.products, products);
+                params.products = products;
+                params.total_price = (params.total_price > 0 ? params.total_price - req.body.price : 0) + (req.body.price * amount);
+
+                Cart.findOneAndUpdate({_id: req.params.id}, params, {new: true})
+                    .then(sevedData => {
+                        returnedCartList(sevedData, Product, res);
+                    })
+                    .catch(next);
+            })
+            .catch(next);
+    },
+
+    /**
+     * Get /api/cart/products
+     * Return the operation products list.
+     * @method getProductsData
+     * @return JSON
+     */
+    getProductsData(req, res, next){
+        if(!req.body.products) return res.status(400).json({message: 'Not heave product or amount_order in request.'});
+
+        let params = {products: req.body.products};
+
+        returnedCartList(params, Product, res);
     },
 
     /**

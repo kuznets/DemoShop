@@ -91,7 +91,7 @@ module.exports = (Orders, Product) => ({
                     data.products = products;
                 }
 
-                Orders.findOneAndUpdate({_id: req.params.id}, data)
+                Orders.findOneAndUpdate({_id: req.params.id}, data, {new: true})
                     .then(() => {
                         res.status(200).json({status: 'success'});
                     })
