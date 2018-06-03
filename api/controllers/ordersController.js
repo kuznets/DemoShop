@@ -4,6 +4,50 @@
  * /api/order/:id
  */
 
+let returnedOrderedProducts = (data, Product, res) => {
+    let productIDs = [],
+        parsed = [];
+
+    data.products.forEach(item => {
+        let splited = item.split(':'); // product list format id:amount_order => 5b03ad3b60b4263ee82c274a:5
+        productIDs.push(splited[0]);
+        parsed.push({id: splited[0], amount_order: splited[1]});
+
+    });
+
+    Product.find(
+        {_id: {$in: productIDs}},
+        {description: 0}
+    )
+        .then(products => {
+            let list = [];
+            products.forEach(product => {
+                parsed.forEach(order => {
+                    if (product._id == order.id) {
+                        let obj = {
+                            price: product.price,
+                            amount: product.amount,
+                            _id: product._id,
+                            title: product.title,
+                            slug: product.slug,
+                            img_url: product.img_url,
+                            amount_order: order.amount_order
+                        };
+
+                        list.push(obj);
+                    }
+                });
+            });
+
+            data.products = list;
+
+            res.status(200).json(data);
+        })
+        .catch(err => {
+            console.log(err);
+            return false;
+        });
+};
 module.exports = (Orders, Product) => ({
     /**
      * POST /api/orders
@@ -55,16 +99,7 @@ module.exports = (Orders, Product) => ({
         if(req.params.id){
             return Orders.find({_id: req.params.id})
                 .then(data => {
-                    Product.find(
-                            {_id: { $all: data.products }}, 
-                            {category: 0, description: 0}
-                        )
-                        .then(list => {
-                            data.products = list;
-
-                            res.status(200).json(data);
-                        })
-                        .catch(next);
+                    returnedOrderedProducts(data, Product, res)
                 })
                 .catch(next);
         } else {

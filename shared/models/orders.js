@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const Orders = new Schema({
     uid: {type: String, required: true},
     user_name: {type: String, required: true},
-    user_sity: {type: String, required: true},
+    user_city: {type: String, required: true},
     user_email: {type: String, required: true},
     products: {type: Array, required: true},
     status: {type: String, enum: [
