@@ -12,7 +12,14 @@ module.exports = Product => ({
    * @return JSON
    */
   findAllProducts(req, res, next) {
-    return Product.find()
+    let queryParams = null;
+    if (req.query != undefined && req.query.sort != undefined) {
+      let params = req.query;
+      queryParams = params.sort > 0 ? params.type : `-${params.type}`;
+    }
+
+    return Product.find({})
+      .sort(queryParams)
       .then(products => res.status(201).json(products))
       .catch(next);
   },

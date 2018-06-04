@@ -2,30 +2,58 @@
  * routes:
  * /api/cart
  * /api/cart/:id
+ * /api/cart/:id/add
+ * /api/cart/:id/update
+ * /api/cart/:id/remove
  */
+let returnedCartList = (data, Product, res) => {
+    let productIDs = [],
+        parsed = [];
+    console.log(12,data.products);
+    // return   res.status(200).json(data);
+    data.products.forEach(item => {
+        //console.log(productIDs, parsed, item);
 
-const getProductsList = (Product, productsArray) => {
-    return Product.find({_id: { $all: productsArray }})
-        .then(list => {
-            return list;
+        let splited = item.split(':'); // product list format id:amount_order => 5b03ad3b60b4263ee82c274a:5
+        productIDs.push(splited[0]);
+        parsed.push({id: splited[0], amount_order: splited[1]});
+
+    });
+    Product.find(
+        {_id: {$in: productIDs}},
+        {category: 0, description: 0}
+    )
+        .then(products => {
+            let list = [];
+            products.forEach(product => {
+                parsed.forEach(order => {
+                  //  console.log(29, products, product._id, order.id);
+                    if (product._id == order.id) {
+                        let obj = {
+                            price: product.price,
+                            amount: product.amount,
+                            _id: product._id,
+                            title: product.title,
+                            slug: product.slug,
+                            img_url: product.img_url,
+                            amount_order: order.amount_order
+                        };
+
+                        list.push(obj);
+                    }
+                });
+            });
+
+            data.products = list;
+            //console.log('list',list);
+
+            res.status(200).json(data);
         })
         .catch(err => {
             console.log(err);
             return false;
         });
 };
-
-const findCart = (Cart, uid) => {
-    return Cart.findOne({uid: {$eq: uid}})
-        .then(data => {
-            return data;
-        })
-        .catch(err => {
-            console.log(err);
-            return false;
-        });
-};
-
 module.exports = (Cart, Product) => ({
     /**
      * POST /api/cart
@@ -37,13 +65,14 @@ module.exports = (Cart, Product) => ({
         if(!req.body.uid) {
             return res.status(404).json({message: 'Non send uid.'});
         } else {
-            let cart = findCart(Cart, req.body.uid);
-
-            if(cart) return res.status(200).json(cart);
-
-            return Cart.create(req.body)
-                .then(data => {
-                    res.status(201).json(data);
+            Cart.findOne({uid: {$eq: req.body.uid}})
+                .then(cart => {
+                    if(cart) return res.status(200).json(cart);
+                    Cart.create(req.body)
+                        .then(data => {
+                            res.status(201).json(data);
+                        })
+                        .catch(next);
                 })
                 .catch(next);
         }
@@ -56,18 +85,14 @@ module.exports = (Cart, Product) => ({
      * @return JSON
      */
     getCartProducts(req, res, next){
-        if(req.query.card_id){
-            return Cart.find({_id: req.query.card_id})
+        if(req.query.cart_id) {
+            return Cart.find({_id: req.query.cart_id})
                 .then(data => {
-                    let products = getProductsList(Product, data.products), list = data;
-                    
-                    list.products = products;
-
-                    res.status(200).json(list);
+                    returnedCartList(data[0], Product, res);
                 })
                 .catch(next);
         } else {
-            res.status(200).json({message: 'Not heave card_id in request.'});
+            res.status(200).json({message: 'Not heave cart_id in request.'});
         }
     },
 
@@ -78,23 +103,50 @@ module.exports = (Cart, Product) => ({
      * @return JSON
      */
     addCartProduct(req, res, next){
-        if(!req.body.product_id || !req.body.price) return res.status(200).json({message: 'Not heave product_id or price in request.'});
+        if(!req.body.product || !req.body.price) return res.status(200).json({message: 'Not heave product or price in request.'});
 
-        return Cart.find({_id: req.params.id})
+        Cart.find({_id: req.params.id})
             .then(data => {
-                let params = data;
+                let params = data[0],
+                    amount = 1,
+                    prods = [];
 
-                params.products.push(req.body.product_id);
-                params.total_price = params.total_price + req.body.price;
-                params.count++;
+                if (params.products.length > 0) {
+                    if (params.products.join().indexOf(req.body.product) >= 0) {
+                        params.products.forEach(item => {
+                            let splited = item.split(':');
+                            //console.log('117 string', req.body.product, item, splited[0], splited[0] === req.body.product);
 
-                return Cart.save(params)
-                    .then(() => {
-                        res.status(200).json({status: 'success'});
+                            if (splited[0] == req.body.product) {
+                                amount = Number(splited[1]) + 1;
+                                prods.push(`${splited[0]}:${amount}`);
+                            } else {
+                                prods.push(item);
+                            }
+                        });
+                    } else {
+                        //console.log(`125 test   ---    ${req.body.product}:${amount}`);
+                        prods = params.products;
+                        prods.push(`${req.body.product}:${amount}`);
+                    }
+
+                    //console.log(132, params.products, prods);
+                    params.products = prods;
+                } else {
+                    params.products.push(`${req.body.product}:${amount}`);
+                    params.count++;
+                }
+
+                //console.log(139, params, params.products);
+                params.total_price = (params.total_price > 0 ? params.total_price - req.body.price : 0) + (req.body.price * amount);
+
+                //console.log(params);
+                Cart.findOneAndUpdate({_id: req.params.id}, params, {new: true})
+                    .then(sevedData => {
+                        console.log(142, sevedData);
+                        returnedCartList(sevedData, Product, res);
                     })
-                    .catch(() => {
-                        res.status(201).json({status: 'error'});
-                    });
+                    .catch(next);
             })
             .catch(next);
     },
@@ -106,30 +158,88 @@ module.exports = (Cart, Product) => ({
      * @return JSON
      */
     removeCartProduct(req, res, next){
-        if(!req.body.product_id || !req.body.price) return res.status(200).json({message: 'Not heave product_id or price in request.'});
+        if(!req.body.product || !req.body.price) return res.status(200).json({message: 'Not heave product or price in request.'});
+
+        //console.log(req.body, req.params, req.query);
 
         return Cart.find({_id: req.params.id})
             .then(data => {
-                let params = data,
-                    products = [];
+                let params = data[0],
+                    products = [],
+                    amount = 1;
 
                 params.products.forEach(item => {
-                    if(req.body.product_id != item) products.push(item);
+                    console.log(172, item.indexOf(req.body.product), item);
+                    if(item.indexOf(req.body.product) < 0) {
+                        products.push(item);
+                    } else {
+                        amount = item.split(':')[1];// product list format id:amount_order => 5b03ad3b60b4263ee82c274a:5
+                    }
                 });
 
+                console.log(180, params.products, products);
                 params.products = products;
-                params.total_price = params.total_price - req.body.price;
+                params.total_price = params.total_price - (req.body.price * amount);
                 params.count--;
 
-                return Cart.save(params)
-                    .then(() => {
-                        res.status(200).json({status: 'success'});
+                Cart.findOneAndUpdate({_id: req.params.id}, params, {new: true})
+                    .then(sevedData => {
+                        returnedCartList(sevedData, Product, res);
                     })
-                    .catch(() => {
-                        res.status(201).json({status: 'error'});
-                    });
+                    .catch(next);
             })
             .catch(next);
+    },
+
+    /**
+     * PUT /api/cart/:id/update
+     * Return the operation object.
+     * @method updateProductInCart
+     * @return JSON
+     */
+    updateProductInCart(req, res, next){
+        if(!req.body.product || !req.body.amount_order) return res.status(400).json({message: 'Not heave product or amount_order in request.'});
+
+        return Cart.find({_id: req.params.id})
+            .then(data => {
+                let params = data[0],
+                    products = [],
+                    amount = 1;
+
+                params.products.forEach(item => {
+                    let splited = item.split(':');
+                    if (splited[0] == req.body.product) {
+                        products.push(`${req.body.product}:${req.body.amount_order}`);
+                    } else {
+                        products.push(item);
+                    }
+                });
+
+                console.log(218, params.products, products);
+                params.products = products;
+                params.total_price = (params.total_price > 0 ? params.total_price - req.body.price : 0) + (req.body.price * amount);
+
+                Cart.findOneAndUpdate({_id: req.params.id}, params, {new: true})
+                    .then(sevedData => {
+                        returnedCartList(sevedData, Product, res);
+                    })
+                    .catch(next);
+            })
+            .catch(next);
+    },
+
+    /**
+     * Get /api/cart/products
+     * Return the operation products list.
+     * @method getProductsData
+     * @return JSON
+     */
+    getProductsData(req, res, next){
+        if(!req.body.products) return res.status(400).json({message: 'Not heave product or amount_order in request.'});
+
+        let params = {products: req.body.products};
+
+        returnedCartList(params, Product, res);
     },
 
     /**
